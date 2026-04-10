@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glance SOV — Agentic Shopping Conversation | Q4 2025 – Q1 2026 | Global + US</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --glance: #6C5CE7; --glance-light: #a29bfe; --google: #4285F4; --openai: #10A37F;
+    --amazon: #FF9900; --msft: #00BCF2; --shopify: #96BF48; --walmart: #0071CE;
+    --positive: #00b894; --negative: #d63031; --neutral: #636e72; --warning: #fdcb6e;
+    --bg: #f8f9fa; --card: #ffffff; --text: #2d3436; --text-secondary: #636e72;
+    --border: #dfe6e9; --accent-bg: #6C5CE710;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #2d3436 0%, #636e72 100%); color: white; padding: 48px 0 40px; }
+  .hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  .hero .subtitle { font-size: 16px; opacity: 0.85; margin-bottom: 20px; }
+  .hero .meta { font-size: 13px; opacity: 0.6; display: flex; gap: 24px; flex-wrap: wrap; }
+
+  /* Headline panel */
+  .headline-panel { background: var(--card); border: 2px solid var(--glance); border-radius: 12px; padding: 32px; margin: -24px 0 32px; position: relative; z-index: 2; box-shadow: 0 4px 24px rgba(108,92,231,0.12); }
+  .headline-panel h2 { font-size: 22px; font-weight: 700; color: var(--glance); margin-bottom: 16px; line-height: 1.3; }
+  .takeaways { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .takeaway { background: var(--accent-bg); border-left: 4px solid var(--glance); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 14px; }
+  .takeaway .label { font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--glance); margin-bottom: 4px; }
+  .big-numbers { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+  .big-num { text-align: center; padding: 20px 12px; background: var(--bg); border-radius: 10px; }
+  .big-num .value { font-size: 32px; font-weight: 800; color: var(--glance); }
+  .big-num .label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+  .big-num.positive .value { color: var(--positive); }
+  .big-num.negative .value { color: var(--negative); }
+
+  /* Definitions */
+  .def-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 20px 0; }
+  .def-card { background: #f0f0ff; border-radius: 10px; padding: 16px; border-left: 4px solid var(--glance); }
+  .def-card h5 { font-size: 14px; font-weight: 700; color: var(--glance); margin-bottom: 6px; }
+  .def-card p { font-size: 13px; color: var(--text-secondary); }
+
+  /* Sections */
+  section { margin-bottom: 40px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; padding-top: 32px; }
+  .section-header .num { background: var(--glance); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .section-header h3 { font-size: 20px; font-weight: 700; }
+  .so-what { background: #fff3cd; border-left: 4px solid #f39c12; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 14px; font-style: italic; }
+  .so-what strong { font-style: normal; color: #e67e22; }
+
+  /* Cards & Tables */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .card h4 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { background: #f1f2f6; font-weight: 700; text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
+  td { padding: 10px 12px; border-bottom: 1px solid #f1f2f6; }
+  tr.glance-row { background: var(--accent-bg); font-weight: 600; }
+  tr.glance-row td { color: var(--glance); }
+  .trend-up { color: var(--positive); font-weight: 600; }
+  .trend-down { color: var(--negative); font-weight: 600; }
+
+  /* Chart container */
+  .chart-container { position: relative; margin: 20px 0; background: var(--card); border-radius: 10px; padding: 20px; border: 1px solid var(--border); }
+  .chart-container canvas { max-height: 400px; }
+
+  /* Tabs */
+  .tab-nav { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 24px; margin-top: 32px; flex-wrap: wrap; }
+  .tab-btn { padding: 12px 20px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-secondary); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+  .tab-btn.active { color: var(--glance); border-bottom-color: var(--glance); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Word Cloud */
+  .word-cloud { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; padding: 30px; background: var(--card); border-radius: 10px; border: 1px solid var(--border); margin: 20px 0; min-height: 200px; }
+  .word-cloud span { display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: 600; transition: transform 0.2s; cursor: default; }
+  .word-cloud span:hover { transform: scale(1.15); }
+
+  /* Screenshot collage */
+  .screenshot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+  .screenshot-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; font-size: 11px; }
+  .screenshot-card .platform-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; margin-bottom: 8px; color: white; }
+  .screenshot-card .source { color: var(--text-secondary); font-size: 10px; word-break: break-all; }
+  .screenshot-card .count { font-size: 24px; font-weight: 800; color: var(--glance); }
+
+  /* Alerts */
+  .alerts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .alerts-grid { grid-template-columns: 1fr; } }
+  .alert-card { border-radius: 10px; padding: 20px; border: 1px solid; }
+  .alert-card.risk { background: #fff5f5; border-color: #feb2b2; }
+  .alert-card.opp { background: #f0fff4; border-color: #9ae6b4; }
+  .alert-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .alert-card.risk h5 { color: var(--negative); }
+  .alert-card.opp h5 { color: var(--positive); }
+  .alert-card ul { font-size: 13px; padding-left: 18px; }
+  .alert-card li { margin-bottom: 4px; }
+
+  /* Badges */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .badge-growth { background: #d4edda; color: #155724; }
+  .badge-warning { background: #f8d7da; color: #721c24; }
+  .badge-b2c { background: #e8e5ff; color: #4a3d99; }
+  .badge-new { background: #cce5ff; color: #004085; }
+
+  /* Collapsible */
+  details { margin: 16px 0; }
+  summary { cursor: pointer; font-weight: 700; font-size: 15px; padding: 12px 16px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); }
+  details[open] summary { border-radius: 8px 8px 0 0; }
+  .details-content { padding: 16px; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; font-size: 13px; }
+
+  /* Heatmap colors */
+  .heat-0 { background: #f8f9fa; } .heat-1 { background: #e8e5ff; } .heat-2 { background: #d1cbff; }
+  .heat-3 { background: #b8b0ff; color: white; } .heat-4 { background: #6C5CE7; color: white; }
+
+  .footer { text-align: center; padding: 32px 0; font-size: 12px; color: var(--text-secondary); border-top: 1px solid var(--border); margin-top: 40px; }
+  @media print { .tab-nav { display: none; } .tab-content { display: block !important; } .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <h1>Glance in the Agentic Shopping Conversation</h1>
+    <div class="subtitle">Share of Voice Report — Q4 2025 vs Q1 2026 | Global + US Market</div>
+    <div class="meta">
+      <span>April 10, 2026</span>
+      <span>13,187 Records · 21 Platforms · 15 Brands · 32 Hashtags</span>
+      <span>Internal — Stakeholder Sharing</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- HEADLINE PANEL -->
+<div class="headline-panel">
+  <h2>Glance broke into the top 3 in US agentic commerce — but faces a critical trust gap between industry narrative and user reality</h2>
+
+  <div class="takeaways">
+    <div class="takeaway">
+      <div class="label">Biggest Win</div>
+      Glance went from 5.0% SOV (7th place) in Q4 to <strong>14.1% (3rd place)</strong> in March US — the strongest growth trajectory of any tracked brand, driven by ShopTalk 2026 and the DirecTV partnership.
+    </div>
+    <div class="takeaway">
+      <div class="label">Biggest Risk</div>
+      Aggregated app store rating across Motorola, TV, and Standalone (Play + iOS): <strong>3.75 stars</strong> (Motorola: 2.4★, TV: 3.0★, Standalone Play: 4.7★, Standalone iOS: 4.9★). Samsung is Galaxy Store-exclusive (rating not publicly accessible). Reviews on the Motorola variant (45.8K reviews) call Glance "malware" and "a psychopathic ex." <strong>75% of user complaints are severity 3+</strong> (trust erosion or harm). One investigative article connecting "bloatware" to "agentic commerce" destroys the narrative.
+    </div>
+    <div class="takeaway">
+      <div class="label">Biggest Surprise</div>
+      The Glance brand spans very different products with very different receptions. The standalone "Shop with AI" app (voluntary, AI styling) is rated <strong>4.7★</strong>. The Motorola lock screen (pre-installed, content feed) is <strong>2.4★</strong> across 45.8K reviews. Different products, same brand name — and the weakest product is the most visible.
+    </div>
+  </div>
+
+  <div class="big-numbers">
+    <div class="big-num"><div class="value">14.1%</div><div class="label">Glance SOV (US Mar)</div></div>
+    <div class="big-num positive"><div class="value">+9.1pp</div><div class="label">Q4 → Mar Change</div></div>
+    <div class="big-num"><div class="value">#3</div><div class="label">US Rank (March)</div></div>
+    <div class="big-num positive"><div class="value">14/19</div><div class="label">Platform Spread (Mar)</div></div>
+    <div class="big-num"><div class="value">13,187</div><div class="label">Records Analyzed</div></div>
+    <div class="big-num negative"><div class="value">0.85</div><div class="label">Reality Divergence</div></div>
+  </div>
+</div>
+
+<!-- DEFINITIONS -->
+<section>
+  <div class="section-header"><div class="num">?</div><h3>Key Definitions (Read This First)</h3></div>
+  <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">If you're new to this report, start here. These terms appear throughout.</p>
+  <div class="def-grid">
+    <div class="def-card">
+      <h5>Share of Voice (SOV)</h5>
+      <p><strong>What % of the online conversation about a topic mentions your brand.</strong> If 100 articles discuss "AI shopping" and 14 mention Glance, Glance's SOV is 14%. Higher = more visible.</p>
+    </div>
+    <div class="def-card">
+      <h5>Agentic Commerce</h5>
+      <p><strong>AI that shops FOR you, not just helps you search.</strong> Instead of browsing Amazon yourself, an AI agent finds, compares, and buys products on your behalf. Think: ChatGPT shopping, Google AI Mode checkout.</p>
+    </div>
+    <div class="def-card">
+      <h5>Reality Layer Divergence</h5>
+      <p><strong>The gap between what the industry says about a brand vs what users actually experience.</strong> Score of 0 = perfect alignment. Score of 1.0 = complete disconnect. Glance's 0.85 means the industry story and user reality are almost opposite.</p>
+    </div>
+    <div class="def-card">
+      <h5>B2B & B2C Voice</h5>
+      <p><strong>B2B = industry professionals talking to each other</strong> (LinkedIn, press, conferences). <strong>B2C = real consumers</strong> (Reddit, Play Store, forums). Both channels matter — B2B builds the category narrative while B2C reflects lived user experience.</p>
+    </div>
+    <div class="def-card">
+      <h5>Platform Spread</h5>
+      <p><strong>How many different platforms mention the brand.</strong> Being on 12/15 platforms means the brand appears almost everywhere. Being on 4/15 means it's isolated to a few channels.</p>
+    </div>
+    <div class="def-card">
+      <h5>Complaint Severity (1-5)</h5>
+      <p><strong>How bad the complaints are.</strong> Level 1 = "minor annoyance." Level 3 = "I no longer trust this brand." Level 5 = "This should be investigated by regulators." Glance's average is 3.4.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEEP DIVES -->
+<section>
+  <div class="section-header"><div class="num">▼</div><h3>Deep Dives — Biggest Win, Biggest Risk, Biggest Surprise</h3></div>
+  <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">Each of the three headline takeaways unpacked with the evidence behind them.</p>
+
+  <details open>
+    <summary style="background:#f0fff4;border-color:var(--positive);">🏆 Biggest Win: From 7th to 3rd in One Quarter</summary>
+    <div class="details-content">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="background:var(--accent-bg);padding:16px;border-radius:8px;text-align:center;">
+          <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;font-weight:700;">Q4 2025</div>
+          <div style="font-size:36px;font-weight:800;color:var(--text-secondary);">5.0%</div>
+          <div style="font-size:13px;">7th place · 5 platforms · 42 mentions</div>
+        </div>
+        <div style="background:var(--accent-bg);padding:16px;border-radius:8px;text-align:center;">
+          <div style="font-size:11px;color:var(--positive);text-transform:uppercase;font-weight:700;">March 2026</div>
+          <div style="font-size:36px;font-weight:800;color:var(--positive);">14.1%</div>
+          <div style="font-size:13px;">3rd place · 14 platforms · 146 mentions (Mar alone)</div>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>What Drove It</th><th>Impact</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td><strong>ShopTalk 2026</strong> (Mar 24-26, Las Vegas)</td><td>March = 41% of Q1 volume. The single biggest inflection event.</td><td>LinkedIn post reactions 40-120+; The Drum positive editorial; DirecTV booth demo praised</td></tr>
+          <tr><td><strong>DirecTV partnership</strong></td><td>45% of all US B2B mentions reference DirecTV. Glance's most credible proof point.</td><td>89 DirecTV mentions in Q1 (up from 12 in Q4) — <span class="trend-up">+642%</span></td></tr>
+          <tr><td><strong>Platform spread expansion</strong></td><td>From 5/19 to 14/19 platforms — Glance went from niche to nearly everywhere.</td><td>New presence on press/news, YouTube, Quora, Pinterest, Instagram SOV</td></tr>
+          <tr><td><strong>Thought leadership + SEO</strong></td><td>Glance blog now ranks for "agentic commerce." Self-published content built the category association.</td><td>538 LinkedIn company page posts; agenticcommerceindex.com; Glance blog SEO</td></tr>
+          <tr><td><strong>Category tailwind</strong></td><td>The entire agentic commerce conversation grew 254%. Glance rode the wave but grew faster than the market.</td><td>Total conversations: 847 → 3,000. Glance outpaced at +467% vs category +254%.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="so-what"><strong>Net →</strong> This is a genuine win. Glance went from an afterthought to a top-3 player in the US agentic commerce conversation in one quarter. The growth was event-driven (ShopTalk, DirecTV), not organic — which means sustaining it requires continued event investment and bridging to always-on channels.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="background:#fff5f5;border-color:var(--negative);">⚠️ Biggest Risk: User Sentiment Gap Across Products</summary>
+    <div class="details-content">
+      <p style="font-size:14px;margin-bottom:16px;">The Glance brand name covers products with dramatically different user experiences. The ratings tell the story:</p>
+
+      <table>
+        <thead><tr><th>Product</th><th>Store</th><th>Rating</th><th>Reviews</th><th>User Experience</th><th>Distribution</th></tr></thead>
+        <tbody>
+          <tr style="background:#fff5f5;">
+            <td><strong>Glance for Motorola (Spaces)</strong></td>
+            <td>Google Play</td>
+            <td style="font-weight:800;color:var(--negative);font-size:18px;">2.4★</td>
+            <td><strong>45,800</strong></td>
+            <td>Content-feed lock screen with news, sports, ads. "Not Now" returns.</td>
+            <td>Pre-installed on all Motorola phones. Cannot fully uninstall.</td>
+          </tr>
+          <tr style="background:#fff8f0;">
+            <td><strong>Glance for Samsung (Expressions)</strong></td>
+            <td>Galaxy Store</td>
+            <td style="color:var(--text-secondary);">Not public</td>
+            <td>—</td>
+            <td>AI-powered lock screen with styling/shopping. Pop-up prompts reported.</td>
+            <td>Galaxy Store exclusive. Opt-in app for S22+ in US, but prompts feel forced.</td>
+          </tr>
+          <tr>
+            <td><strong>Glance TV</strong></td>
+            <td>Google Play</td>
+            <td style="font-weight:600;color:var(--warning);">3.0★</td>
+            <td>379</td>
+            <td>TV screensaver/commerce. Curated content praised, some UI issues noted.</td>
+            <td>DirecTV + smart TVs. Newer product, lower volume.</td>
+          </tr>
+          <tr style="background:#f0fff4;">
+            <td><strong>Glance – Shop with AI (Play)</strong></td>
+            <td>Google Play</td>
+            <td style="font-weight:800;color:var(--positive);font-size:18px;">4.7★</td>
+            <td>~500</td>
+            <td>AI shopping assistant. Users voluntarily download. "Actually helpful."</td>
+            <td>Voluntary download from Play Store.</td>
+          </tr>
+          <tr style="background:#f0fff4;">
+            <td><strong>Glance – Shop with AI (iOS)</strong></td>
+            <td>App Store</td>
+            <td style="font-weight:800;color:var(--positive);font-size:18px;">4.9★</td>
+            <td>~2,000</td>
+            <td>Same AI shopping experience on iOS. Highest rated Glance product.</td>
+            <td>Voluntary download from iOS App Store.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="background:#fff3cd;padding:16px;border-radius:8px;border-left:4px solid #f39c12;margin:16px 0;">
+        <p style="font-size:14px;font-weight:700;color:#856404;">The pattern is clear: voluntary products score 4.7-4.9★. Pre-installed products score 2.4-3.0★.</p>
+        <p style="font-size:14px;margin-top:8px;">The risk is not the ratings themselves — it's that the <strong>most visible product</strong> (Motorola, 45.8K reviews) defines the brand for consumers who never encounter the standalone app. And 75% of complaints on the lock screen products are severity 3+ (trust erosion, harm allegations), not minor feature gripes.</p>
+      </div>
+
+      <h5 style="margin:16px 0 8px;font-size:14px;">What consumers say — by severity level</h5>
+      <table>
+        <thead><tr><th style="width:60px;">Level</th><th style="width:160px;">Category</th><th style="width:80px;">% of Complaints</th><th>Representative Quotes</th></tr></thead>
+        <tbody>
+          <tr><td>1-2</td><td>Minor / Feature</td><td>25%</td><td><em>"Small annoyance", "Ads on lock screen", "battery drain"</em></td></tr>
+          <tr style="background:#fff5f5;"><td style="font-weight:800;color:var(--negative);">3</td><td style="font-weight:700;">Trust Erosion</td><td style="font-weight:700;">40%</td><td><em>"Bloatware", "dark patterns", "can't remove", "no real opt-out"</em></td></tr>
+          <tr style="background:#fff5f5;"><td style="font-weight:800;color:var(--negative);">4</td><td style="font-weight:700;">Harm Allegation</td><td style="font-weight:700;">28%</td><td><em>"Malware", "spyware", "privacy violation", "breaks banking apps"</em></td></tr>
+          <tr style="background:#fff5f5;"><td style="font-weight:800;color:var(--negative);">5</td><td style="font-weight:700;">Regulatory / Legal</td><td style="font-weight:700;">7%</td><td><em>Consumer Rights Wiki page, "class action", "FTC"</em></td></tr>
+        </tbody>
+      </table>
+
+      <div class="so-what"><strong>Net →</strong> The risk is that an investigative article or viral post connects "Glance bloatware" (the 2.4★ Motorola product, 45.8K reviews) to "Glance agentic commerce pioneer" (the B2B narrative) in a single story. The voluntary products (4.7-4.9★) prove users like Glance when they choose it — the path forward is making the lock screen experience feel equally chosen.</div>
+    </div>
+  </details>
+
+  <details>
+    <summary style="background:#f0f0ff;border-color:var(--glance);">🔍 Biggest Surprise: Same Brand, Opposite Receptions</summary>
+    <div class="details-content">
+      <p style="font-size:14px;margin-bottom:16px;">The most unexpected finding in this analysis: the Glance brand is not one thing. It maps to at least four distinct user experiences with a <strong>2.5-star spread</strong> between the worst and best rated products.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="background:#fff5f5;padding:20px;border-radius:8px;text-align:center;border:2px solid var(--negative);">
+          <div style="font-size:11px;color:var(--negative);text-transform:uppercase;font-weight:700;margin-bottom:4px;">Most Visible Product</div>
+          <div style="font-size:13px;font-weight:600;">Motorola Lock Screen (Spaces)</div>
+          <div style="font-size:48px;font-weight:800;color:var(--negative);">2.4★</div>
+          <div style="font-size:13px;color:var(--text-secondary);">45,800 reviews · Pre-installed · Can't fully uninstall</div>
+          <div style="font-size:12px;color:var(--negative);margin-top:8px;font-style:italic;">"It reminds me of a psychopathic ex"</div>
+        </div>
+        <div style="background:#f0fff4;padding:20px;border-radius:8px;text-align:center;border:2px solid var(--positive);">
+          <div style="font-size:11px;color:var(--positive);text-transform:uppercase;font-weight:700;margin-bottom:4px;">Highest Rated Product</div>
+          <div style="font-size:13px;font-weight:600;">Standalone App – Shop with AI</div>
+          <div style="font-size:48px;font-weight:800;color:var(--positive);">4.7-4.9★</div>
+          <div style="font-size:13px;color:var(--text-secondary);">~2,500 ratings · Voluntary download · iOS + Play</div>
+          <div style="font-size:12px;color:var(--positive);margin-top:8px;font-style:italic;">"The Glance intelligent shopping agent is so helpful"</div>
+        </div>
+      </div>
+
+      <table>
+        <thead><tr><th>Dimension</th><th>Lock Screen Products (Moto + Samsung)</th><th>Voluntary Products (Standalone + TV)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>How users get it</strong></td><td>Pre-installed or prompted via pop-ups</td><td>User actively downloads or opts in</td></tr>
+          <tr><td><strong>Core experience</strong></td><td>Content feed / ads on lock screen</td><td>AI shopping assistant / TV commerce</td></tr>
+          <tr><td><strong>Can users remove it?</strong></td><td>Disable only (Moto); unclear opt-out (Samsung)</td><td>Standard uninstall</td></tr>
+          <tr><td><strong>User sentiment</strong></td><td class="trend-down">-0.60 to -0.82</td><td class="trend-up">+0.25 to +0.55</td></tr>
+          <tr><td><strong>What drives the rating</strong></td><td><em>Consent and control</em> — users feel imposed upon</td><td><em>Utility</em> — users find actual value</td></tr>
+          <tr><td><strong>B2B or B2C driver?</strong></td><td>Primarily B2C (complaints)</td><td>B2B (DirecTV narrative) + small B2C (happy users)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="so-what"><strong>Why this matters →</strong> This finding reframes the entire strategy. The problem is not "Glance has bad reviews." The problem is "Glance's best products are invisible while its most visible product has the worst experience." The standalone app proves the AI shopping concept works when users choose it. The challenge is making the lock screen products feel equally voluntary — or making the voluntary products the face of the brand.</div>
+    </div>
+  </details>
+</section>
+
+<!-- TABS -->
+<div class="tab-nav no-print">
+  <button class="tab-btn active" onclick="switchTab('global')">🌍 Global View</button>
+  <button class="tab-btn" onclick="switchTab('us')">🇺🇸 US Only</button>
+  <button class="tab-btn" onclick="switchTab('b2b')">🏢 B2B & B2C</button>
+  <button class="tab-btn" onclick="switchTab('products')">📊 User Sentiment</button>
+  <button class="tab-btn" onclick="switchTab('reality')">⚠️ Reality Check</button>
+  <button class="tab-btn" onclick="switchTab('evidence')">📸 Source Evidence</button>
+  <button class="tab-btn" onclick="switchTab('caveats')">⚖️ Limitations</button>
+</div>
+
+<!-- TAB 1: GLOBAL -->
+<div id="tab-global" class="tab-content active">
+
+<section>
+  <div class="section-header"><div class="num">1</div><h3>Global Competitive Landscape</h3></div>
+  <div class="so-what"><strong>So what? →</strong> The agentic commerce conversation grew 254% from Q4 to Q1 globally. Glance moved from 8th to 4th — the largest jump of any brand. But Google, Shopify, and Amazon still dominate with 3-5x Glance's volume.</div>
+
+  <div class="card">
+    <h4>Global Brand SOV — March 2026</h4>
+    <table>
+      <thead><tr><th>Rank</th><th>Brand</th><th>Q4 2025 SOV</th><th>March 2026 SOV</th><th>Change</th><th>Trajectory</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Google</strong></td><td>22.0%</td><td>26.3%</td><td class="trend-up">+4.3pp</td><td><em>UCP protocol dominance</em></td></tr>
+        <tr><td>2</td><td><strong>Shopify</strong></td><td>8.2%</td><td>14.7%</td><td class="trend-up">+6.5pp</td><td><em>Agentic Storefronts launch</em></td></tr>
+        <tr><td>3</td><td><strong>Amazon</strong></td><td>15.1%</td><td>13.1%</td><td class="trend-down">-2.0pp</td><td><em>Rufus ads disappointing</em></td></tr>
+        <tr class="glance-row"><td><strong>4</strong></td><td><strong>Glance</strong></td><td>5.0%</td><td><strong>11.8%</strong></td><td class="trend-up"><strong>+6.8pp</strong></td><td><strong>Fastest riser</strong> <em>— ShopTalk + DirecTV</em></td></tr>
+        <tr><td>5</td><td><strong>OpenAI/ChatGPT</strong></td><td>14.3%</td><td>10.2%</td><td class="trend-down">-4.1pp</td><td><em>Pivoted away from Instant Checkout</em></td></tr>
+        <tr><td>6</td><td><strong>Microsoft</strong></td><td>5.5%</td><td>6.4%</td><td class="trend-up">+0.9pp</td><td><em>Copilot Checkout steady</em></td></tr>
+        <tr><td>7</td><td><strong>Walmart</strong></td><td>4.1%</td><td>5.8%</td><td class="trend-up">+1.7pp</td><td><em>Sparky +35% baskets</em></td></tr>
+        <tr><td>8</td><td><strong>Stripe</strong></td><td>4.8%</td><td>4.1%</td><td class="trend-down">-0.7pp</td><td><em>Infrastructure, not consumer</em></td></tr>
+        <tr><td>9</td><td><strong>Perplexity</strong></td><td>—</td><td>3.2%</td><td><span class="badge badge-new">NEW</span></td><td><em>Buy with Pro launch</em></td></tr>
+        <tr><td>10</td><td><strong>Criteo</strong></td><td>—</td><td>2.1%</td><td><span class="badge badge-new">NEW</span></td><td><em>Recommendation Service</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container"><canvas id="globalSovChart"></canvas></div>
+
+  <div class="card">
+    <h4>Key Numbers — Global</h4>
+    <table>
+      <thead><tr><th>Metric</th><th>Q4 2025</th><th>Q1 2026</th><th>Growth</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Total conversations</strong></td><td>847</td><td>3,000 (Jan: 1,049 · Feb: 712 · Mar: 1,239)</td><td class="trend-up">+254%</td></tr>
+        <tr><td><strong>Glance mentions</strong></td><td>42</td><td>238 (Jan: 34 · Feb: 58 · Mar: 146)</td><td class="trend-up">+467%</td></tr>
+        <tr style="background:var(--accent-bg);"><td><strong>Glance SOV</strong></td><td>5.0%</td><td><strong>11.8% (March)</strong></td><td class="trend-up"><strong>+6.8pp</strong></td></tr>
+        <tr><td><strong>Glance rank</strong></td><td>8th</td><td>4th (March)</td><td class="trend-up">+4 positions</td></tr>
+        <tr><td><strong>Platform spread</strong></td><td>5/19</td><td>14/19 (March)</td><td class="trend-up">+9 platforms</td></tr>
+        <tr><td><strong>DirecTV mentions</strong></td><td>12</td><td>89 (Jan: 8 · Feb: 14 · Mar: 67)</td><td class="trend-up">+642%</td></tr>
+        <tr style="background:#fff5f5;"><td><strong>Negative user mentions</strong></td><td>186</td><td>614 (Jan: 112 · Feb: 168 · Mar: 334)</td><td class="trend-down">+230%</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:8px;">Note: March = 41% of Q1 volume. ShopTalk 2026 (Mar 24-26) was the inflection point.</p>
+  </div>
+</section>
+
+<!-- WORD CLOUD: Category Terms -->
+<section>
+  <div class="section-header"><div class="num">2</div><h3>What the Conversation Sounds Like</h3></div>
+  <div class="so-what"><strong>So what? →</strong> The word cloud shows what terms appear most in the agentic commerce conversation. Larger = more frequent. Notice how "Google", "Shopify", "ChatGPT" dominate, while "Glance" is mid-sized — present but not leading.</div>
+  
+  <div class="card"><h4>Category Word Cloud — Most Frequent Terms (Q1 2026)</h4>
+  <div class="word-cloud">
+    <span style="font-size:42px;color:#4285F4;">Google</span>
+    <span style="font-size:38px;color:#96BF48;">Shopify</span>
+    <span style="font-size:36px;color:#10A37F;">ChatGPT</span>
+    <span style="font-size:34px;color:#FF9900;">Amazon</span>
+    <span style="font-size:32px;color:var(--glance);">agentic commerce</span>
+    <span style="font-size:30px;color:#635BFF;">Stripe</span>
+    <span style="font-size:28px;color:var(--glance);font-weight:800;">Glance</span>
+    <span style="font-size:26px;color:#0071CE;">Walmart</span>
+    <span style="font-size:26px;color:#00BCF2;">Microsoft</span>
+    <span style="font-size:24px;color:#333;">AI shopping</span>
+    <span style="font-size:24px;color:#333;">UCP protocol</span>
+    <span style="font-size:22px;color:#333;">checkout</span>
+    <span style="font-size:22px;color:#1DA1F2;">Perplexity</span>
+    <span style="font-size:20px;color:#333;">AI agent</span>
+    <span style="font-size:20px;color:#333;">DirecTV</span>
+    <span style="font-size:18px;color:#333;">NRF 2026</span>
+    <span style="font-size:18px;color:#333;">ShopTalk</span>
+    <span style="font-size:18px;color:#333;">merchant</span>
+    <span style="font-size:16px;color:#666;">lock screen</span>
+    <span style="font-size:16px;color:#666;">virtual try-on</span>
+    <span style="font-size:16px;color:#F06292;">Criteo</span>
+    <span style="font-size:14px;color:#666;">conversational</span>
+    <span style="font-size:14px;color:#666;">personalization</span>
+    <span style="font-size:14px;color:#666;">InMobi</span>
+  </div></div>
+
+  <div class="card"><h4>User Complaint Word Cloud — What Consumers Say About Glance</h4>
+  <div class="word-cloud" style="background:#fff5f5;">
+    <span style="font-size:44px;color:var(--negative);">bloatware</span>
+    <span style="font-size:40px;color:var(--negative);">remove</span>
+    <span style="font-size:38px;color:var(--negative);">disable</span>
+    <span style="font-size:36px;color:var(--negative);">uninstall</span>
+    <span style="font-size:34px;color:var(--negative);">ads</span>
+    <span style="font-size:32px;color:#c0392b;">lock screen</span>
+    <span style="font-size:30px;color:#c0392b;">battery drain</span>
+    <span style="font-size:28px;color:#c0392b;">keeps coming back</span>
+    <span style="font-size:26px;color:#c0392b;">malware</span>
+    <span style="font-size:26px;color:#c0392b;">pre-installed</span>
+    <span style="font-size:24px;color:#e74c3c;">spyware</span>
+    <span style="font-size:24px;color:#e74c3c;">privacy</span>
+    <span style="font-size:22px;color:#e74c3c;">forced</span>
+    <span style="font-size:22px;color:#e74c3c;">not now button</span>
+    <span style="font-size:20px;color:#e74c3c;">virus</span>
+    <span style="font-size:20px;color:#e74c3c;">dark pattern</span>
+    <span style="font-size:18px;color:#e74c3c;">intrusive</span>
+    <span style="font-size:18px;color:#e74c3c;">Shizuku</span>
+    <span style="font-size:16px;color:#e74c3c;">ADB</span>
+    <span style="font-size:16px;color:#e74c3c;">psychopathic ex</span>
+    <span style="font-size:14px;color:#e74c3c;">banking apps broken</span>
+    <span style="font-size:14px;color:#e74c3c;">Consumer Rights Wiki</span>
+  </div></div>
+</section>
+
+<!-- SOV BY PLATFORM -->
+<section>
+  <div class="section-header"><div class="num">3</div><h3>Where Is Glance Visible? (Platform-by-Platform)</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Glance is a <strong>LinkedIn brand</strong>. It dominates there (~15-20% SOV) but is virtually invisible on Reddit, Instagram, and Product Hunt — the platforms where consumers actually discover products.</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Platform</th><th>Glance SOV</th><th style="width:120px;">Verdict</th><th>One-Line Summary</th></tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4;"><td><strong>LinkedIn</strong></td><td style="font-weight:700;color:var(--positive);">15-20%</td><td><span class="badge badge-growth">STRONG</span></td><td><strong>Best platform.</strong> 118K followers. <em>But content is self-referential.</em></td></tr>
+        <tr style="background:#f0fff4;"><td><strong>Google Web/SEO</strong></td><td>8-12%</td><td><span class="badge badge-growth">OK</span></td><td>Blog SEO working. <strong>Ranks for "agentic commerce."</strong></td></tr>
+        <tr><td><strong>News/Press</strong></td><td>5-8%</td><td><span class="badge" style="background:#fff3cd;color:#856404;">MODERATE</span></td><td>DirecTV + ShopTalk coverage. <em>Event-dependent.</em></td></tr>
+        <tr><td><strong>Quora</strong></td><td>3-5%</td><td><span class="badge" style="background:#fff3cd;color:#856404;">MODERATE</span></td><td>Some branded Q&A. <em>"What is Glance?"</em> questions.</td></tr>
+        <tr><td><strong>YouTube</strong></td><td>3-5%</td><td><span class="badge" style="background:#fff3cd;color:#856404;">MODERATE</span></td><td><strong>"How to remove Glance" tutorials dominate.</strong> <em>Bad.</em></td></tr>
+        <tr><td><strong>Twitter/X</strong></td><td>2-3%</td><td><span class="badge badge-warning">WEAK</span></td><td>67-294 views per tweet. <strong>Zero hashtags used.</strong></td></tr>
+        <tr><td><strong>Pinterest</strong></td><td>2-3%</td><td><span class="badge badge-warning">WEAK</span></td><td><em>Mostly generic content, not brand-specific.</em></td></tr>
+        <tr style="background:#fff5f5;"><td><strong>Reddit</strong></td><td style="font-weight:700;color:var(--negative);">0-1%</td><td><span class="badge badge-warning">ABSENT</span></td><td><strong>Zero presence</strong> in agentic commerce discussions.</td></tr>
+        <tr><td><strong>Instagram</strong></td><td>0-1%</td><td><span class="badge" style="background:#fff3cd;color:#856404;">LOW</span></td><td>@glanceinspires is active but <em>low reach in category SOV.</em></td></tr>
+        <tr style="background:#fff5f5;"><td><strong>Product Hunt</strong></td><td style="font-weight:700;color:var(--negative);">0-1%</td><td><span class="badge badge-warning">NOT LISTED</span></td><td><strong>Not listed as a product.</strong> <em>Missing early adopters.</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SOV BY SUB-CATEGORY -->
+<section>
+  <div class="section-header"><div class="num">4</div><h3>Glance Owns "Lock Screen" — But That's a Tiny Pond</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Glance dominates "lock screen commerce" (70-80% SOV) but that sub-category is <strong>tiny</strong>. The big pond — "AI shopping" and "agentic commerce" — is dominated by Google, Amazon, and ChatGPT. Glance has 6-10% there.</div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Sub-Category</th><th>Glance SOV</th><th>Who Dominates</th><th style="width:180px;">Size of Conversation</th></tr></thead>
+      <tbody>
+        <tr style="background:var(--accent-bg);"><td><strong>"Lock screen commerce"</strong></td><td style="font-weight:800;color:var(--glance);">70-80%</td><td>Glance (nobody else does this)</td><td><span style="font-size:20px;">🟢</span> Small niche</td></tr>
+        <tr><td><strong>"Agentic commerce"</strong> (exact term)</td><td>8-12%</td><td>Google (~25%)</td><td><span style="font-size:20px;">🟡</span> Growing fast</td></tr>
+        <tr><td><strong>"AI shopping agent"</strong></td><td>5-8%</td><td>Amazon Rufus (~20%)</td><td><span style="font-size:20px;">🔴</span> Huge — mainstream</td></tr>
+        <tr><td><strong>"Shopping with AI"</strong></td><td>2-5%</td><td>ChatGPT (~25%)</td><td><span style="font-size:20px;">🔴</span> Huge — mainstream</td></tr>
+        <tr><td><strong>"Conversational commerce"</strong></td><td>1-3%</td><td>Shopify (~20%)</td><td><span style="font-size:20px;">🟡</span> Enterprise-focused</td></tr>
+      </tbody>
+    </table>
+    <div class="so-what"><strong>Translation →</strong> Imagine you're the biggest fish in a puddle (lock screen commerce). The ocean (AI shopping) is right next to you, and whales (Google, Amazon, ChatGPT) are swimming in it. You need to get into the ocean — but you also need to not get eaten.</div>
+  </div>
+</section>
+
+<!-- EVENT TIMELINE -->
+<section>
+  <div class="section-header"><div class="num">5</div><h3>What Happened and When — The Event Timeline</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Glance's SOV is <strong>event-driven</strong>, not organic. It spikes around conferences (NRF, ShopTalk) and announcements (DirecTV, Samsung), then drops. Without events, the conversation goes quiet.</div>
+  <div class="card">
+    <h4>Q4 2025 — The Setup</h4>
+    <div style="position:relative;padding-left:24px;border-left:3px solid var(--glance);">
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--glance);">Jun 4, 2025</span><br><strong>Samsung Galaxy Store + Glance</strong> partnership announced — US rollout begins<br><span style="font-size:11px;color:var(--text-secondary);">Source: <a href="https://glance.com/newsroom/pressrelease/glance-samsung-galaxy-store-ai-shopping-experience-us" target="_blank" style="color:var(--glance);">Glance Newsroom</a></span></div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--glance);">Oct 14, 2025</span><br><strong>DirecTV + Glance</strong> partnership — TV-native commerce<br><span style="font-size:11px;color:var(--text-secondary);">Source: The Verge, PR Newswire</span></div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--glance);">Oct 17, 2025</span><br><strong>McKinsey publishes "Agentic commerce opportunity"</strong> — category gets legitimized<br><span style="font-size:11px;color:var(--text-secondary);">Source: <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-agentic-commerce-opportunity-how-ai-agents-are-ushering-in-a-new-era-for-consumers-and-merchants" target="_blank" style="color:var(--glance);">McKinsey</a></span></div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--glance);">Dec 4, 2025</span><br><strong>InMobi raises $350M</strong> ahead of IPO; SoftBank exits $250M stake</div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--negative);">Dec 2025</span><br><strong>Nothing removes "Lock Glimpse"</strong> after user backlash — a warning sign for Glance</div>
+    </div>
+  </div>
+  <div class="card">
+    <h4>Q1 2026 — The Explosion</h4>
+    <div style="position:relative;padding-left:24px;border-left:3px solid var(--positive);">
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--positive);">Jan 8-14</span><br><strong>NRF 2026</strong> — Google UCP protocol, Microsoft Copilot Checkout, Walmart+Gemini, Shopify Agentic Plan all announced. Category goes mainstream.</div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--glance);">Feb 5</span><br><strong>Criteo launches Agentic Commerce Recommendation Service</strong> — another competitor enters</div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--glance);">Feb 21-22</span><br><strong>India AI Impact Summit</strong> — Naveen Tewari: "$3 trillion by 2047"</div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--positive);">Mar 12-26</span><br><strong>ShopTalk 2026 (Las Vegas)</strong> — Glance DirecTV booth demo, The Drum positive coverage, OpenAI ACP expansion. <span style="font-weight:700;color:var(--glance);">This is the inflection month.</span></div>
+      <div style="margin-bottom:16px;"><span style="font-weight:700;color:var(--warning);">Mar 24</span><br><strong>CNBC: "OpenAI revamps shopping"</strong> after Instant Checkout disappoints — ChatGPT pivots, opening a gap Glance could fill</div>
+    </div>
+  </div>
+</section>
+
+<!-- GOOGLE TRENDS -->
+<section>
+  <div class="section-header"><div class="num">6</div><h3>Does Anyone Actually Search for Glance?</h3></div>
+  <div class="so-what"><strong>So what? →</strong> <strong>No.</strong> "Glance AI" scores <strong>1 out of 100</strong> on Google Trends (US). For comparison, "AI shopping" scores 55. This means almost nobody in the US is actively looking for Glance. The brand has awareness among industry insiders but <strong>zero consumer pull</strong>.</div>
+  <div class="card">
+    <h4>Google Trends — US Search Interest (Oct 2025 – Apr 2026)</h4>
+    <table>
+      <thead><tr><th>Search Term</th><th style="width:100px;">Score (0-100)</th><th style="width:140px;">Visual</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td><strong>"AI shopping"</strong></td><td style="font-weight:800;font-size:20px;color:var(--positive);">55</td><td><div style="background:var(--positive);height:20px;border-radius:4px;width:55%;"></div></td><td><strong>This is what consumers search.</strong> <em>Mainstream term.</em></td></tr>
+        <tr><td><strong>"shopping with AI"</strong></td><td style="font-weight:700;">13</td><td><div style="background:#fdcb6e;height:20px;border-radius:4px;width:13%;"></div></td><td><em>Growing variant.</em> <strong>Consumer language.</strong></td></tr>
+        <tr><td><strong>"agentic commerce"</strong></td><td style="font-weight:700;">9</td><td><div style="background:var(--glance);height:20px;border-radius:4px;width:9%;"></div></td><td><strong>Industry jargon.</strong> <em>Spikes at NRF + ShopTalk only.</em></td></tr>
+        <tr style="background:#fff5f5;"><td><strong>"Glance AI"</strong></td><td style="font-weight:800;font-size:20px;color:var(--negative);">1</td><td><div style="background:var(--negative);height:20px;border-radius:4px;width:1%;"></div></td><td><strong>Near zero.</strong> <em>Very few people are searching for this brand.</em></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;margin-top:8px;"><a href="https://trends.google.com/trends/explore?date=2025-10-01%202026-04-10&geo=US&q=Glance%20AI,agentic%20commerce,AI%20shopping" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Verify on Google Trends →</a></p>
+  </div>
+</section>
+
+</div><!-- end tab-global -->
+
+<!-- TAB 2: US ONLY -->
+<div id="tab-us" class="tab-content">
+
+<section>
+  <div class="section-header"><div class="num">1</div><h3>US Market — Glance's Strongest Position</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Glance is actually <strong>stronger in the US than globally</strong> — 14.1% SOV vs 11.8% global. This is because DirecTV (US-only) and ShopTalk (Las Vegas) are the key drivers. The jump from 5.0% to 14.1% is the largest quarterly gain by any non-platform brand.</div>
+
+  <div class="card">
+    <h4>US Brand Ranking — March 2026</h4>
+    <table>
+      <thead><tr><th>Rank</th><th>Brand</th><th>Q4 SOV</th><th>Mar SOV</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Google</strong></td><td>24.0%</td><td>25.1%</td><td class="trend-up">+1.1pp</td></tr>
+        <tr><td>2</td><td><strong>Shopify</strong></td><td>9.5%</td><td>15.8%</td><td class="trend-up">+6.3pp</td></tr>
+        <tr class="glance-row"><td><strong>3</strong></td><td><strong>Glance</strong></td><td>5.0%</td><td><strong>14.1%</strong></td><td class="trend-up"><strong>+9.1pp</strong></td></tr>
+        <tr><td>4</td><td><strong>Amazon</strong></td><td>16.2%</td><td>12.4%</td><td class="trend-down">-3.8pp</td></tr>
+        <tr><td>5</td><td><strong>OpenAI/ChatGPT</strong></td><td>13.8%</td><td>9.7%</td><td class="trend-down">-4.1pp</td></tr>
+        <tr><td>6</td><td><strong>Walmart</strong></td><td>4.5%</td><td>7.3%</td><td class="trend-up">+2.8pp</td></tr>
+        <tr><td>7</td><td><strong>Microsoft</strong></td><td>5.8%</td><td>5.6%</td><td>-0.2pp</td></tr>
+        <tr><td>8</td><td><strong>Stripe</strong></td><td>4.8%</td><td>4.2%</td><td>-0.6pp</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>US Key Numbers</h4>
+    <table>
+      <thead><tr><th>Metric</th><th>Q4 2025</th><th>Q1 2026</th><th>Growth</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Total conversations (US)</strong></td><td>524</td><td>1,888 (Jan: 683 · Feb: 432 · Mar: 773)</td><td class="trend-up">+260%</td></tr>
+        <tr><td><strong>Glance mentions</strong></td><td>26</td><td>168 (Jan: 21 · Feb: 38 · Mar: 109)</td><td class="trend-up">+546%</td></tr>
+        <tr style="background:var(--accent-bg);"><td><strong>Glance SOV</strong></td><td>5.0%</td><td><strong>14.1% (March)</strong></td><td class="trend-up"><strong>+9.1pp</strong></td></tr>
+        <tr><td><strong>Glance rank</strong></td><td>7th</td><td>3rd (March)</td><td class="trend-up">+4 positions</td></tr>
+        <tr><td><strong>Platform spread</strong></td><td>4/15</td><td>12/15 (March)</td><td class="trend-up">+8 platforms</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>Global vs US Comparison</h4>
+    <table>
+      <thead><tr><th>Dimension</th><th>Global</th><th>US Only</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Glance SOV (March)</strong></td><td>11.8%</td><td><strong>14.1%</strong></td><td><strong>Stronger in US</strong> <em>(DirecTV effect)</em></td></tr>
+        <tr><td><strong>Glance rank</strong></td><td>4th</td><td><strong>3rd</strong></td><td><strong>US is the primary market</strong></td></tr>
+        <tr><td><strong>Mention growth</strong></td><td>+467%</td><td><strong>+546%</strong></td><td><strong>Faster growth in US</strong></td></tr>
+        <tr><td><strong>DirecTV % of mentions</strong></td><td>37%</td><td><strong>45%</strong></td><td><strong>US story is DirecTV-dependent</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="so-what"><strong>⚠ Caveat →</strong> US SOV is inflated by Glance's own LinkedIn/press output. Organic/third-party only SOV ≈ 8-9% (still a meaningful gain from Q4's ~3%).</div>
+  </div>
+</section>
+</div><!-- end tab-us -->
+
+<!-- TAB 3: B2B vs B2C -->
+<div id="tab-b2b" class="tab-content">
+
+<section>
+  <div class="section-header"><div class="num">1</div><h3>B2B & B2C — The Full Picture of Glance's Voice</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Glance's story is told across two complementary channels. The <strong>B2B channel</strong> (LinkedIn, press, conferences) is building category authority — positive sentiment, growing SOV, and Glance-driven thought leadership is landing. The <strong>B2C channel</strong> (Reddit, Play Store, forums) reflects how users experience the products day-to-day. Reading both together gives the full picture and reveals where Glance-owned work is driving results and where the next wave of investment should go.</div>
+
+  <div class="card">
+    <h4>B2B & B2C Channel Overview — Global</h4>
+    <table>
+      <thead><tr><th>Metric</th><th>B2B (Industry)</th><th>B2C (Consumer)</th><th>What This Tells Us</th></tr></thead>
+      <tbody>
+        <tr><td><strong>% of Glance mentions</strong></td><td>68% (Q1 avg) → <strong>61%</strong> (March)</td><td>32% (Q1 avg) → <strong>39%</strong> (March)</td><td><strong>B2C voice is growing</strong> — more users are engaging</td></tr>
+        <tr><td><strong>Q4 2025 ratio</strong></td><td><strong>72%</strong></td><td>28%</td><td><em>B2B built the initial foundation</em></td></tr>
+        <tr><td><strong>Sentiment score</strong></td><td class="trend-up"><strong>+0.72</strong> <em>(Positive)</em></td><td class="trend-down"><strong>-0.78</strong> <em>(Strongly Negative)</em></td><td><strong>Sentiment gap = opportunity</strong> for UX investment</td></tr>
+        <tr><td><strong>Primary platforms</strong></td><td>LinkedIn <em>(1,869 total: 1,331 posts + 538 co. pages)</em>, Press/News, Conferences</td><td>Reddit <strong>(4,168)</strong>, Play Store, XDA, Forums</td><td><strong>B2C has 3x the volume</strong> — large audience to convert</td></tr>
+        <tr><td><strong>Key narrative</strong></td><td><em>"30M installs, agentic commerce pioneer, DirecTV partner"</em></td><td><em>"Bloatware, malware, can't uninstall" (lock screen) vs "actually helpful" (standalone)</em></td><td><strong>Narrative varies by product line</strong></td></tr>
+        <tr><td><strong>Content type</strong></td><td><em>Press releases, event coverage, thought leadership</em></td><td><em>Reviews, support requests, how-to discussions</em></td><td>Both channels generate engagement</td></tr>
+        <tr><td><strong>Engagement quality</strong></td><td>LinkedIn: <strong>40-120</strong> reactions per post</td><td>Reddit: <strong>41-912</strong> upvotes/helpful votes per post</td><td><strong>Consumer engagement is high-intensity</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container"><canvas id="b2bB2cChart"></canvas></div>
+
+  <div class="card">
+    <h4>B2B & B2C Channel Mix — US Only</h4>
+    <table>
+      <thead><tr><th>Metric</th><th>B2B (Industry)</th><th>B2C (Consumer)</th><th>Shift</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Q4 2025 ratio (US)</strong></td><td>74%</td><td>26%</td><td><em>B2B-led launch phase</em></td></tr>
+        <tr><td><strong>Q1 2026 ratio (US)</strong></td><td>65%</td><td>35%</td><td class="trend-up">B2C growing +9pp</td></tr>
+        <tr><td><strong>March 2026 ratio (US)</strong></td><td>58%</td><td><strong>42%</strong></td><td class="trend-up">B2C growing +16pp from Q4</td></tr>
+      </tbody>
+    </table>
+    <div class="so-what"><strong>Trend →</strong> The B2C channel is growing rapidly in the US (from 26% to 42%), driven by Samsung Galaxy S25 Ultra and Motorola users engaging with Glance products. This growing B2C voice represents both a scaling user base and an opportunity — the B2B narrative has built category awareness, and now UX improvements can shape how this expanding B2C audience experiences the brand.</div>
+  </div>
+
+  <div class="card">
+    <h4>Where B2B and B2C Conversations Happen — with Q4 Baseline</h4>
+    <table>
+      <thead><tr><th>Platform</th><th>Q4 2025</th><th>Q1 2026</th><th>Change</th><th>Channel</th><th>Glance-Owned?</th><th>Sentiment</th><th>What Glance's Work Is Driving</th></tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4;"><td><strong>LinkedIn</strong></td><td>480</td><td><strong>1,869</strong></td><td class="trend-up">+289%</td><td><span class="badge badge-growth">B2B</span></td><td><strong>Yes — 538 posts</strong> (29%) from Glance/InMobi pages</td><td class="trend-up">+0.72</td><td><em>Glance thought leadership + ShopTalk content drove the SOV inflection. Employee sharing amplifies reach 3-4x.</em></td></tr>
+        <tr style="background:#f0fff4;"><td><strong>Press/News</strong></td><td>120</td><td>435</td><td class="trend-up">+263%</td><td><span class="badge badge-growth">B2B</span></td><td><strong>Partially</strong> — PR drives coverage via DirecTV, Samsung announcements</td><td class="trend-up">+0.45</td><td><em>DirecTV + ShopTalk press beats generated earned media. The Drum's positive review = highest-value B2B asset.</em></td></tr>
+        <tr style="background:#f0fff4;"><td><strong>Twitter/X</strong></td><td>210</td><td>791</td><td class="trend-up">+277%</td><td><span class="badge badge-growth">Mixed</span></td><td><strong>Yes</strong> — @glance_inspires owned posts (positive); user replies (negative)</td><td>+0.15</td><td><em>Owned posts generate small but consistent presence. Opportunity: add hashtags (currently zero) to increase discoverability.</em></td></tr>
+        <tr style="background:#f0fff4;"><td><strong>YouTube</strong></td><td>130</td><td>471</td><td class="trend-up">+262%</td><td><span class="badge badge-growth">Mixed</span></td><td><strong>Partially</strong> — product demos are Glance-adjacent; tutorials are organic</td><td>-0.10</td><td><em>Removal tutorials dominate organic. Glance product demos need SEO to compete.</em></td></tr>
+        <tr><td><strong>Reddit</strong></td><td><strong>2,800</strong></td><td><strong>4,168</strong></td><td class="trend-up">+49%</td><td>B2C</td><td><strong>No</strong> — 100% organic user-generated</td><td class="trend-down">-0.78</td><td><em>Not Glance-driven, but indicates growing user base. Opportunity: engage authentically in r/ArtificialIntelligence.</em></td></tr>
+        <tr><td><strong>Play Store</strong></td><td>18</td><td>35</td><td class="trend-up">+94%</td><td>B2C</td><td><strong>No</strong> — user reviews; Glance replies present but inconsistent</td><td class="trend-down">-0.82</td><td><em>Review responses exist but some in wrong language. Consistent, localized replies would improve perception.</em></td></tr>
+        <tr><td><strong>Forums (XDA, AC, TG)</strong></td><td>95</td><td>218</td><td class="trend-up">+129%</td><td>B2C</td><td><strong>No</strong> — organic technical discussions</td><td class="trend-down">-0.65</td><td><em>Power-user audience. Clearer opt-out reduces removal-guide volume, the primary content here.</em></td></tr>
+        <tr style="background:#f0fff4;"><td><strong>Instagram</strong></td><td>420</td><td>1,629</td><td class="trend-up">+288%</td><td><span class="badge badge-growth">B2B</span></td><td><strong>Yes</strong> — @glanceinspires is primary account; event + influencer content</td><td>+0.30</td><td><em>Brand-owned content drives hashtag adoption (#GlanceItShopIt, #AskGlance). Strongest visual storytelling channel.</em></td></tr>
+        <tr><td><strong>Quora</strong></td><td>280</td><td>649</td><td class="trend-up">+132%</td><td>B2C</td><td><strong>No</strong> — organic Q&A</td><td>-0.40</td><td><em>FAQ-style questions = opportunity for official Glance answers to shape the "What is Glance?" narrative.</em></td></tr>
+      </tbody>
+    </table>
+    <div class="so-what"><strong>Q4 → Q1 headline →</strong> Every platform grew, but Glance-owned channels (LinkedIn +289%, Instagram +288%, Twitter +277%) outpaced organic B2C channels (Reddit +49%, Forums +129%). This shows Glance's content engine is working — the next lever is improving what happens when the B2C audience encounters the product.</div>
+  </div>
+
+  <div class="card">
+    <h4>Where Glance-Owned Work Is Driving B2B Results</h4>
+    <div style="background:#f0fff4;padding:16px;border-radius:8px;border-left:4px solid var(--positive);margin:12px 0;">
+      <p style="font-size:14px;"><strong>What Glance owns and what it's producing:</strong> Glance's B2B output — LinkedIn thought leadership (538 company page posts), ShopTalk/NRF presence, DirecTV partnership announcements, and blog SEO content — is directly driving the SOV gains. This owned content accounts for ~40% of LinkedIn volume and generated the March inflection that moved Glance to #3 in the US.</p>
+      <p style="font-size:14px;margin-top:8px;"><strong>The B2C growth opportunity:</strong> Every Samsung S25 Ultra or Motorola phone sold adds users to the B2C channel. Samsung sells <strong>millions</strong> of phones per quarter. As B2C voice grows toward parity with B2B (projected by Q3 2026), investing in UX improvements on lock screen products will shape whether that growing audience becomes advocates or detractors.</p>
+    </div>
+  </div>
+</section>
+</div><!-- end tab-b2b -->
+
+<!-- TAB 4: PRODUCT LINES -->
+<div id="tab-products" class="tab-content">
+
+<section>
+  <div class="section-header"><div class="num">1</div><h3>User Sentiment — How Users Experience Each Product Line</h3></div>
+  <div class="so-what"><strong>So what? →</strong> User sentiment toward Glance varies dramatically by product line. The same brand name produces very different user experiences across Motorola/Spaces, Samsung/Expressions, TV (DirecTV + smart TVs), and the Standalone app. Understanding sentiment at the product level — not just the brand level — reveals where users are happiest and where investment in UX will have the most impact.</div>
+
+  <div class="chart-container"><canvas id="productChart"></canvas></div>
+
+  <div class="card">
+    <h4>User Sentiment by Product Line</h4>
+    <table>
+      <thead><tr><th>Product</th><th>Platform</th><th>Store Rating</th><th>Sentiment Score</th><th>What Users Say</th><th>% of User Mentions</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff5f5;">
+          <td><strong>Glance for Motorola</strong><br><span style="font-size:11px;color:var(--text-secondary);">(Spaces)</span></td>
+          <td>Motorola phones (pre-installed)</td>
+          <td style="color:var(--negative);font-weight:700;">2.4★ <span style="font-size:11px;">(45.8K reviews)</span></td>
+          <td class="trend-down">Strongly Negative (-0.82)</td>
+          <td><em>"Bloatware", "malware", "can't uninstall", "drains battery"</em> — <strong>removal guides dominate</strong></td>
+          <td><strong>~40%</strong> of B2C mentions</td>
+        </tr>
+        <tr style="background:#fff8f0;">
+          <td><strong>Glance for Samsung</strong><br><span style="font-size:11px;color:var(--text-secondary);">(Expressions)</span></td>
+          <td>Samsung Galaxy Store <em>(S22+ in US)</em></td>
+          <td style="color:var(--warning);">Galaxy Store <span style="font-size:11px;"><em>(not public via web)</em></span></td>
+          <td class="trend-down">Negative (-0.60)</td>
+          <td><em>"AI lockscreen that keeps reappearing", "nobody asked for this"</em> — <strong>privacy concerns</strong></td>
+          <td><strong>~30%</strong> of B2C mentions</td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td><strong>Glance TV</strong><br><span style="font-size:11px;color:var(--text-secondary);">(DirecTV + Smart TVs)</span></td>
+          <td>DirecTV, Smart TVs <em>(Airtel, Google)</em></td>
+          <td style="color:var(--positive);font-weight:600;">3.0★ <span style="font-size:11px;">(379 reviews)</span></td>
+          <td class="trend-up">Mixed-to-Positive (+0.25)</td>
+          <td><strong>"AI-powered home shopping"</strong>, ShopTalk demo praised, <strong>"uncontested"</strong> in TV commerce</td>
+          <td><strong>~60%</strong> of B2B mentions <em>(via DirecTV)</em></td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td><strong>Glance – Shop with AI</strong><br><span style="font-size:11px;color:var(--text-secondary);">(Standalone App)</span></td>
+          <td>Google Play + iOS App Store <em>(voluntary)</em></td>
+          <td style="color:var(--positive);font-weight:600;">4.7★ Play · 4.9★ iOS <span style="font-size:11px;">(2K iOS ratings)</span></td>
+          <td class="trend-up">Positive (+0.55)</td>
+          <td><strong>Voluntary users</strong>, AI shopping assistant, <em>"actually helpful"</em></td>
+          <td>~5% <em>(low volume but high quality)</em></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>Lock Screen Sentiment: Related Products, Different User Experiences</h4>
+    <div style="background:#fff5f5;padding:16px;border-radius:8px;border-left:4px solid var(--negative);margin:12px 0;">
+      <p style="font-size:15px;font-weight:600;color:var(--negative);">Motorola/Spaces and Samsung/Expressions are both lock screen experiences — but user sentiment differs because of distinct UX, distribution models, and user bases.</p>
+      <ul style="font-size:14px;padding-left:20px;margin-top:8px;">
+        <li><strong>Motorola/Spaces:</strong> Pre-installed on all Motorola phones. A content-feed lock screen with news, sports, and ads. Users cannot fully uninstall — only disable. The "Not Now" button returns. 50M+ downloads reflects device sales, not user choice. <strong>2.4★ across 45.8K reviews</strong> — the most reviewed Glance product and the most negative. The complaints are primarily about lack of opt-out and battery drain.</li>
+        <li><strong>Samsung/Expressions:</strong> A distinct product distributed exclusively via <a href="https://glance.com/newsroom/pressrelease/glance-samsung-galaxy-store-ai-shopping-experience-us" target="_blank" style="color:var(--negative);">Samsung Galaxy Store</a> (announced Jun 4, 2025). Designed as an AI-powered lock screen with styling and shopping features — a different experience from the Motorola content feed. Available as an opt-in app for Galaxy S22+ in the US. However, users report pop-up prompts appearing without clear consent. Galaxy Store rating is not publicly accessible via web.</li>
+        <li><strong>What they share:</strong> Both are lock screen products under the Glance brand. Both face user backlash around unwanted prompts. But the underlying product experiences, feature sets, and distribution mechanisms are different — and should not be treated as interchangeable.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Positive Sentiment: TV & Standalone App</h4>
+    <div style="background:#f0fff4;padding:16px;border-radius:8px;border-left:4px solid var(--positive);margin:12px 0;">
+      <p style="font-size:15px;font-weight:600;color:var(--positive);">Where users choose to engage, sentiment is strongly positive.</p>
+      <ul style="font-size:14px;padding-left:20px;margin-top:8px;">
+        <li><strong>Glance TV (DirecTV):</strong> Demonstrated at ShopTalk 2026 to positive reception. The Drum wrote favorably about the "AI-powered home shopping" demo. DirecTV partnership is Glance's <strong>only uncontested proof point</strong> — no competitor is doing TV-native agentic commerce. Rating of 3.0★ (379 reviews) is moderate, with users praising curated content but noting some UI issues.</li>
+        <li><strong>Standalone App (Shop with AI):</strong> <strong>4.7★</strong> — the highest-rated Glance product by far. This is a different product from the Motorola lock screen — it's an AI styling/shopping app that users voluntarily download. The contrast in ratings (4.7★ vs 2.4★) reflects different products and different experiences, not just different distribution. The Glance brand is being judged by its weakest, most visible product line.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>How Each Product Line Shapes Overall Sentiment</h4>
+    <table>
+      <thead><tr><th>Product</th><th>B2B Contribution</th><th>B2C Contribution</th><th>Net Effect on Glance SOV</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Motorola/Spaces</strong></td>
+          <td>Low — rarely mentioned in B2B</td>
+          <td style="color:var(--negative);font-weight:600;">Very High — source of most complaints</td>
+          <td style="color:var(--negative);">Negative drag on brand</td>
+        </tr>
+        <tr>
+          <td><strong>Samsung/Expressions</strong></td>
+          <td>Moderate — Samsung partnership is a B2B talking point</td>
+          <td style="color:var(--negative);font-weight:600;">Growing — S25 Ultra complaints rising</td>
+          <td style="color:var(--warning);">Mixed — B2B positive, B2C turning negative</td>
+        </tr>
+        <tr>
+          <td><strong>TV (DirecTV)</strong></td>
+          <td style="color:var(--positive);font-weight:600;">Very High — 45% of US B2B mentions</td>
+          <td>Low — few consumer reviews yet</td>
+          <td style="color:var(--positive);">Strong positive driver</td>
+        </tr>
+        <tr>
+          <td><strong>Standalone App</strong></td>
+          <td>Low — not prominently marketed</td>
+          <td style="color:var(--positive);font-weight:600;">Positive — voluntary users are happy</td>
+          <td>Neutral (low volume, high quality)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>Reddit Sentiment by Product Line</h4>
+    <table>
+      <thead><tr><th>Subreddit</th><th>Product Focus</th><th>Threads</th><th>Sentiment</th><th>Sample</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff5f5;">
+          <td><a href="https://www.reddit.com/r/MotoG/search/?q=glance" target="_blank" style="color:var(--negative);">r/MotoG</a></td>
+          <td>Motorola/Spaces</td>
+          <td>50+</td>
+          <td class="trend-down">-0.85</td>
+          <td>"Glance AI is f***ing garbage" (41 upvotes)</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><a href="https://www.reddit.com/r/motorola/search/?q=glance" target="_blank" style="color:var(--negative);">r/motorola</a></td>
+          <td>Motorola/Spaces</td>
+          <td>30+</td>
+          <td class="trend-down">-0.80</td>
+          <td>"Guide to remove Glance and other bloatware"</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><a href="https://www.reddit.com/r/samsunggalaxy/search/?q=glance" target="_blank" style="color:var(--negative);">r/samsunggalaxy</a></td>
+          <td>Samsung/Expressions</td>
+          <td>15+</td>
+          <td class="trend-down">-0.60</td>
+          <td>"AI lockscreen that keeps reappearing on Samsung"</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><a href="https://www.reddit.com/r/S25Ultra/search/?q=glance+OR+%22lock+screen%22" target="_blank" style="color:var(--negative);">r/S25Ultra</a></td>
+          <td>Samsung/Expressions</td>
+          <td>10+</td>
+          <td class="trend-down">-0.55</td>
+          <td>"AI Lock Screen Pop Up" — users frustrated</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><a href="https://www.reddit.com/r/Android/search/?q=glance+samsung" target="_blank" style="color:var(--negative);">r/Android</a></td>
+          <td>Samsung/Expressions</td>
+          <td>5+</td>
+          <td class="trend-down">-0.70</td>
+          <td>"Samsung phones getting a weird AI shopping platform nobody asked for" (121 comments)</td>
+        </tr>
+        <tr>
+          <td><a href="https://www.reddit.com/r/ArtificialInteligence/search/?q=glance+shopping" target="_blank" style="color:var(--positive);">r/ArtificialIntelligence</a></td>
+          <td>Standalone / General</td>
+          <td>1</td>
+          <td class="trend-up">+0.60</td>
+          <td>"The Glance intelligent shopping agent is so helpful"</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="so-what"><strong>Key insight →</strong> The only positive Reddit thread about Glance references the standalone AI shopping experience — a fundamentally different product from both the Motorola and Samsung lock screen experiences. The brand perception problem is that consumers don't distinguish between these distinct products. "Glance" means lock screen to most users, regardless of which product they actually encounter.</div>
+  </div>
+
+  <div class="card">
+    <h4>Strategic Implication: Improving Sentiment by Product Line</h4>
+    <div class="alerts-grid">
+      <div class="alert-card risk">
+        <h5>🔴 Motorola/Spaces: Reputation Liability</h5>
+        <ul>
+          <li>2.4★ across 45.8K reviews — the most visible consumer data point</li>
+          <li>Every removal guide reinforces "Glance = bloatware" association</li>
+          <li><strong>Action:</strong> Make opt-out permanent and frictionless. Change "Not Now" to "No Thanks (permanent)"</li>
+        </ul>
+      </div>
+      <div class="alert-card risk">
+        <h5>🔴 Samsung/Expressions: Early Warning Signs</h5>
+        <ul>
+          <li>Samsung/Expressions is a different product from Motorola/Spaces — but early user complaints echo similar themes (unwanted prompts, unclear opt-out)</li>
+          <li>r/S25Ultra and r/samsunggalaxy threads show frustration is building, though at lower volume than Motorola</li>
+          <li><strong>Action:</strong> Work with Samsung to ensure the opt-in UX is genuinely consensual before complaint volume grows</li>
+        </ul>
+      </div>
+      <div class="alert-card opp">
+        <h5>🟢 TV/DirecTV: Best Asset</h5>
+        <ul>
+          <li>Only positive product narrative in the entire dataset</li>
+          <li>No competitor in TV-native agentic commerce</li>
+          <li><strong>Action:</strong> Make TV the lead product in all marketing. "Glance TV" not "Glance lock screen"</li>
+        </ul>
+      </div>
+      <div class="alert-card opp">
+        <h5>🟢 Standalone App: Proof of Concept</h5>
+        <ul>
+          <li>4.7★ — highest-rated Glance product, but a different experience from lock screen</li>
+          <li>Brand halo problem: consumers don't distinguish between Glance products — the 2.4★ lock screen defines the brand</li>
+          <li><strong>Action:</strong> Promote voluntary download. Use standalone ratings in B2B pitch to counter "bloatware" narrative</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</div><!-- end tab-products -->
+
+<!-- TAB 5: REALITY CHECK -->
+<div id="tab-reality" class="tab-content">
+
+<section>
+  <div class="section-header"><div class="num">⚠</div><h3>The Reality Layer Divergence — Glance's Biggest Problem</h3></div>
+  <div class="so-what"><strong>What is this? →</strong> We measured what <strong>industry professionals</strong> say about Glance (LinkedIn, press) vs what <strong>actual users</strong> say (Reddit, Play Store, forums). The gap between them is the widest we've ever measured for any brand.</div>
+
+  <div class="chart-container"><canvas id="realityChart"></canvas></div>
+
+  <div class="card">
+    <h4>What the Industry Says (LinkedIn, Press, Conferences)</h4>
+    <div style="background:#f0fff4;padding:16px;border-radius:8px;border-left:4px solid var(--positive);margin:12px 0;">
+      <p style="font-size:15px;">"30M U.S. Installs, 4,000+ AI-Powered Moments" — Glance LinkedIn (40+ reactions)</p>
+      <p style="font-size:15px;margin-top:8px;">"Most significant transformation in commerce since the internet" — InMobi LinkedIn (120+ reactions)</p>
+      <p style="font-size:15px;margin-top:8px;">"9M monthly US users, 200M+ SKUs, 3x conversion rates" — ShopTalk 2026</p>
+      <p style="font-size:13px;color:var(--positive);margin-top:12px;font-weight:700;">Sentiment: +0.72 (POSITIVE) · Source: 1,869 LinkedIn records (1,331 posts + 538 company pages)</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>What Users Actually Say (Reddit, Play Store, Forums)</h4>
+    <div style="background:#fff5f5;padding:16px;border-radius:8px;border-left:4px solid var(--negative);margin:12px 0;">
+      <p style="font-size:15px;">"This is a literal virus. It breaks lock screen security, drains your battery" — r/MotoG (41 upvotes)</p>
+      <p style="font-size:15px;margin-top:8px;">"It reminds me of a psychopathic ex. It's very intrusive" — Play Store (8 helpful votes)</p>
+      <p style="font-size:15px;margin-top:8px;">"This think is a pain and the very definition of Malware" — Tom's Guide Forum</p>
+      <p style="font-size:15px;margin-top:8px;">"Choices were yes or maybe later. No 'go away' option" — Play Store (45 helpful votes)</p>
+      <p style="font-size:15px;margin-top:8px;">"It's bloatware and spyware" — Play Store (176 helpful votes)</p>
+      <p style="font-size:13px;color:var(--negative);margin-top:12px;font-weight:700;">Sentiment: -0.78 (STRONGLY NEGATIVE) · Source: 4,168 Reddit comments + 21 Play Store reviews</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Additional Red Flags</h4>
+    <table>
+      <tbody>
+        <tr><td><strong>Google Trends</strong></td><td>"Glance AI" = <strong>1 out of 100</strong> in US search interest</td><td><em>Near-zero brand awareness</em></td></tr>
+        <tr><td><strong>Twitter</strong></td><td>@glance_inspires uses <strong>zero hashtags</strong></td><td><strong>No hashtag discoverability</strong></td></tr>
+        <tr><td><strong>Reddit</strong></td><td>Mentioned in <strong>0 of 5</strong> agentic commerce threads</td><td><strong>Absent from category discussion</strong></td></tr>
+        <tr><td><strong>Play Store</strong></td><td>Support replies in <strong>Indonesian/Malay</strong> to US users</td><td><strong>Broken localization</strong></td></tr>
+        <tr><td><strong>Play Store</strong></td><td><strong>912</strong> people found <em>"intrusive and annoying"</em> helpful</td><td><strong>Mass agreement</strong> <em>with complaints</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Risks & Opportunities -->
+<!-- COMPLAINT SEVERITY -->
+  <div class="section-header"><div class="num">⚡</div><h3>How Bad Are the Complaints? (Severity Scale)</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Not all complaints are equal. A "minor annoyance" is different from "this should be investigated by regulators." <strong>75% of Glance complaints are Level 3 or higher</strong> — meaning they're about trust violation, not feature dissatisfaction.</div>
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:50px;">Level</th><th style="width:180px;">What It Means</th><th style="width:80px;">% of Complaints</th><th style="width:80px;">Visual</th><th>Examples From Real Data</th></tr></thead>
+      <tbody>
+        <tr><td style="font-size:20px;text-align:center;">1</td><td>Minor Inconvenience</td><td>5%</td><td><div style="background:#dfe6e9;height:16px;border-radius:4px;width:5%;min-width:4px;"></div></td><td>"Small annoyance" — didn't really care</td></tr>
+        <tr><td style="font-size:20px;text-align:center;">2</td><td>Feature Complaint</td><td>20%</td><td><div style="background:#fdcb6e;height:16px;border-radius:4px;width:20%;"></div></td><td>"Ads on lock screen", "battery drain"</td></tr>
+        <tr style="background:#fff5f5;"><td style="font-size:20px;text-align:center;font-weight:800;color:var(--negative);">3</td><td style="font-weight:700;">Trust Erosion</td><td style="font-weight:700;color:var(--negative);">40%</td><td><div style="background:var(--negative);height:16px;border-radius:4px;width:40%;"></div></td><td>"Bloatware", "dark patterns", "can't remove", "no real opt-out"</td></tr>
+        <tr style="background:#fff5f5;"><td style="font-size:20px;text-align:center;font-weight:800;color:var(--negative);">4</td><td style="font-weight:700;">Harm Allegation</td><td style="font-weight:700;color:var(--negative);">28%</td><td><div style="background:#c0392b;height:16px;border-radius:4px;width:28%;"></div></td><td>"Malware", "spyware", "privacy violation", "breaks banking apps"</td></tr>
+        <tr style="background:#fff5f5;"><td style="font-size:20px;text-align:center;font-weight:800;color:var(--negative);">5</td><td style="font-weight:700;">Regulatory / Legal</td><td style="font-weight:700;color:var(--negative);">7%</td><td><div style="background:#6c1d1d;height:16px;border-radius:4px;width:7%;"></div></td><td>Consumer Rights Wiki page, "class action", "FTC"</td></tr>
+      </tbody>
+    </table>
+    <div style="background:#fff3cd;padding:12px 16px;border-radius:8px;border-left:4px solid #e67e22;margin-top:12px;font-size:14px;">
+      <strong>75% are Level 3+.</strong> This is not "people don't like the color scheme." This is "people think this app is <em>harming</em> them." That's a fundamentally different problem to solve.
+    </div>
+  </div>
+
+<!-- PLATFORM DEEP-DIVES -->
+  <div class="section-header"><div class="num">🔍</div><h3>Platform Deep-Dives — The Surprising Details</h3></div>
+  <div class="card">
+    <table>
+      <thead><tr><th style="width:120px;">Platform</th><th>The Stat That Matters</th><th>Why It's Important</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff5f5;">
+          <td><strong>Reddit</strong><br><span style="font-size:11px;">4,168 records</span></td>
+          <td><strong>100%</strong> of Glance-specific posts are negative. Literally every one is about removal/disabling. Also: GitHub issue filed to add Glance to <a href="https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation" target="_blank" style="color:var(--negative);">Universal Android Debloater</a>.</td>
+          <td>Reddit is where tech-savvy consumers form opinions. If Glance = bloatware here, that opinion spreads.</td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td><strong>LinkedIn</strong><br><span style="font-size:11px;">1,869 total (1,331 posts + 538 co. pages)</span></td>
+          <td><strong>538 records (40%)</strong> come from Glance + InMobi's own company pages. Content is <strong>entirely self-referential</strong> — Glance posts → employees share → agency amplifies.</td>
+          <td>The B2B story looks strong, but it's mostly Glance talking to itself. Minimal independent industry discussion.</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><strong>Twitter/X</strong><br><span style="font-size:11px;">791 records</span></td>
+          <td><strong>154,000x engagement gap.</strong> OpenAI's agentic commerce tweet = 10.3M views. Glance's best tweet = 67 views. Average: 1.9 likes, 132 views per tweet. Uses <strong>zero hashtags</strong>.</td>
+          <td>Glance is invisible on the platform where journalists, investors, and tech influencers discover things.</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><strong>Play Store</strong><br><span style="font-size:11px;">35 records</span></td>
+          <td>Individual "helpful" vote counts: <strong>912, 677, 571, 203</strong>. That's thousands of people pressing "yes this complaint represents my experience too."</td>
+          <td>These aren't isolated opinions. They're mass-validated user experiences.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<!-- FORESIGHT ENGINE -->
+  <div class="section-header"><div class="num">🔮</div><h3>What Happens Next? (Foresight Engine)</h3></div>
+  <div class="so-what"><strong>So what? →</strong> Glance has real momentum (+0.25) but it's <strong>fragile</strong>. The brand is growing in absolute terms but <strong>shrinking relative to the category</strong>. If you take away conferences and press releases, the organic conversation about Glance is thin.</div>
+
+  <div class="card">
+    <h4>Speed Check — Is Glance Speeding Up or Slowing Down?</h4>
+    <table>
+      <thead><tr><th>Dimension</th><th>Q4 → Q1 Change</th><th>Direction</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4;"><td><strong>Mention volume (absolute)</strong></td><td class="trend-up">+150-200%</td><td><span style="font-size:18px;">📈</span> ACCELERATING</td><td><strong>More people talking about Glance overall</strong></td></tr>
+        <tr style="background:#fff5f5;"><td><strong>Mention volume (relative to category)</strong></td><td class="trend-down">-5-8%</td><td><span style="font-size:18px;">📉</span> DECLINING</td><td><strong>Category grew faster than Glance.</strong> <em>Competitors are louder.</em></td></tr>
+        <tr style="background:#f0fff4;"><td><strong>B2B sentiment</strong></td><td class="trend-up">+0.15</td><td><span style="font-size:18px;">📈</span> GROWING</td><td><em>Industry likes the story more over time</em></td></tr>
+        <tr style="background:#fff5f5;"><td><strong>B2C sentiment</strong></td><td class="trend-down">-0.12</td><td><span style="font-size:18px;">📉</span> DECLINING</td><td><strong>Consumers like it less.</strong> <em>More phones = more complaints.</em></td></tr>
+      </tbody>
+    </table>
+    <div style="text-align:center;padding:16px;margin-top:12px;background:var(--bg);border-radius:8px;">
+      <span style="font-size:14px;color:var(--text-secondary);">Overall Momentum Score:</span><br>
+      <span style="font-size:36px;font-weight:800;color:var(--warning);">+0.25</span><br>
+      <span style="font-size:13px;color:var(--warning);font-weight:600;">MODERATE POSITIVE — but fragile</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>⚡ 6 Tensions That Could Break Either Way</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">These are the "fault lines." Each one could help or hurt Glance depending on what happens next.</p>
+    <table>
+      <thead><tr><th style="width:30px;">#</th><th>The Tension</th><th style="width:90px;">Urgency</th><th>What Tips It</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff5f5;"><td>1</td><td><strong>USER vs INDUSTRY narrative</strong> <em>(0.85 divergence)</em></td><td><span style="font-weight:800;color:var(--negative);">CRITICAL</span></td><td><em>A major tech outlet connects</em> <strong>"bloatware Glance"</strong> <em>to</em> <strong>"agentic commerce Glance"</strong> <em>in one story</em></td></tr>
+        <tr style="background:#fff5f5;"><td>2</td><td><strong>Lock screen baggage vs agentic pivot</strong></td><td><span style="font-weight:700;color:#e67e22;">HIGH</span></td><td><em>Glance either</em> <strong>decouples the brands</strong> <em>or fixes the lock screen UX</em></td></tr>
+        <tr style="background:#fff5f5;"><td>3</td><td><strong>"30M installs" vs near-zero consumer awareness</strong></td><td><span style="font-weight:700;color:#e67e22;">HIGH</span></td><td><em>Someone publicly asks</em> <strong>"if 30M people use it, why does nobody talk about it?"</strong></td></tr>
+        <tr><td>4</td><td><strong>India brand vs US market</strong></td><td><span style="font-weight:600;">MEDIUM</span></td><td><em>Support replies in Indonesian to US users</em> <strong>already happening</strong></td></tr>
+        <tr><td>5</td><td><strong>First-mover vs platform power</strong></td><td><span style="font-weight:600;">MEDIUM</span></td><td><em>Google/Amazon replicate Glance's features at</em> <strong>1000x scale</strong></td></tr>
+        <tr><td>6</td><td><strong>Conference demos vs daily UX</strong></td><td><span style="font-weight:600;">MEDIUM</span></td><td><em>DirecTV demo is compelling; daily lock screen is hostile.</em> <strong>Which story wins?</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>🌊 4 White Spaces Nobody Owns Yet</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Gaps in the market where Glance could win if it moves fast.</p>
+    <table>
+      <thead><tr><th style="width:30px;">#</th><th>Opportunity</th><th>The Signal</th><th>Who Owns It Now?</th></tr></thead>
+      <tbody>
+        <tr style="background:#f0fff4;"><td>1</td><td><strong>Ethical agentic commerce</strong></td><td>Users are begging for opt-in, transparent AI shopping</td><td style="color:var(--positive);font-weight:600;">Nobody</td></tr>
+        <tr style="background:#f0fff4;"><td>2</td><td><strong>TV-native commerce</strong></td><td>DirecTV demo is uncontested. Zero competitors on TV screens.</td><td style="color:var(--positive);font-weight:600;">Glance (only player)</td></tr>
+        <tr style="background:#f0fff4;"><td>3</td><td><strong>Category education</strong></td><td>ShopTalk attendees "desperately seeking an AI playbook" (Retail Brew)</td><td style="color:var(--warning);">Fragmented — nobody owns the narrative</td></tr>
+        <tr style="background:#f0fff4;"><td>4</td><td><strong>SMB agentic access</strong></td><td>WooCommerce users on Reddit: "how do I get started with agentic?"</td><td style="color:var(--positive);font-weight:600;">Underserved</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-header"><div class="num">!</div><h3>What To Do About It</h3></div>
+  <div class="alerts-grid">
+    <div class="alert-card risk">
+      <h5>🔴 RISK: Narrative Contamination</h5>
+      <ul>
+        <li>The Verge already wrote: "Glance = bloatware from InMobi"</li>
+        <li>Consumer Rights Wiki has a Glance page</li>
+        <li>One viral Reddit post connecting bloatware→agentic commerce collapses the story</li>
+        <li><strong>Fix:</strong> Change the lock screen opt-in from "Not Now" to "No Thanks" that sticks permanently</li>
+      </ul>
+    </div>
+    <div class="alert-card opp">
+      <h5>🟢 OPPORTUNITY: TV Commerce is Uncontested</h5>
+      <ul>
+        <li>DirecTV partnership has zero competitors in TV-native agentic commerce</li>
+        <li>The Drum's ShopTalk review was genuinely positive</li>
+        <li>Macy's seeing 400% more spending with AI assistants (Gemini-powered)</li>
+        <li><strong>Action:</strong> Shift the narrative from "lock screen company" to "TV commerce pioneer"</li>
+      </ul>
+    </div>
+    <div class="alert-card risk">
+      <h5>🔴 RISK: Metric Credibility</h5>
+      <ul>
+        <li>"30M installs" includes forced pre-installs on Samsung/Motorola</li>
+        <li>Primary Instagram is @glanceinspires — ensure metrics cite the correct handle</li>
+        <li><strong>Fix:</strong> Switch to engagement metrics: "9M MAU" or "X million AI shopping sessions"</li>
+      </ul>
+    </div>
+    <div class="alert-card opp">
+      <h5>🟢 OPPORTUNITY: Category Education</h5>
+      <ul>
+        <li>ShopTalk attendees were "desperately seeking an AI playbook" (Retail Brew)</li>
+        <li>Reddit ecommerce threads asking "has anyone tried agentic commerce?"</li>
+        <li>agenticcommerceindex.com already exists as a Glance asset</li>
+        <li><strong>Action:</strong> Publish "State of Agentic Commerce 2026" report — become the McKinsey of the category</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</div><!-- end tab-reality -->
+
+<!-- TAB 4: SOURCE EVIDENCE -->
+<div id="tab-evidence" class="tab-content">
+
+<section>
+  <div class="section-header"><div class="num">📸</div><h3>Source Evidence — Where the Data Comes From</h3></div>
+  <p style="font-size:14px;color:var(--text-secondary);margin-bottom:8px;">Every number in this report is backed by real crawled data. <strong>Click any link to verify.</strong> All crawls were conducted April 9-10, 2026.</p>
+  <p style="font-size:12px;color:var(--glance);margin-bottom:20px;font-weight:600;">🔗 Links open in new tabs. Some LinkedIn/Instagram links require a logged-in session to view.</p>
+
+  <!-- PLATFORM CARDS WITH LINKS -->
+  <div class="screenshot-grid">
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#FF4500;">Reddit</div>
+      <div class="count">4,168</div>
+      <div class="source">200+ threads · 25+ subreddits · ✅ Authenticated</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.reddit.com/search/?q=%22glance%22+%22agentic+commerce%22&sort=relevance&t=year" target="_blank" style="color:#FF4500;">🔍 Search: Glance + agentic commerce</a><br>
+        <a href="https://www.reddit.com/search/?q=%22glance%22+%22lock+screen%22+%22bloatware%22&sort=relevance&t=year" target="_blank" style="color:#FF4500;">🔍 Search: Glance bloatware</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#0A66C2;">LinkedIn</div>
+      <div class="count">1,869</div>
+      <div class="source">64 queries + 32 hashtags + company pages · ✅ Auth</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.linkedin.com/search/results/content/?keywords=%22glance%22%20%22agentic%20commerce%22" target="_blank" style="color:#0A66C2;">🔍 Search: Glance agentic commerce</a><br>
+        <a href="https://www.linkedin.com/company/glancescreen/" target="_blank" style="color:#0A66C2;">📄 Glance Company Page</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">Instagram</div>
+      <div class="count">1,629</div>
+      <div class="source">32 hashtags + 15 post click-throughs · ✅ Auth</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.instagram.com/explore/tags/glanceinspires/" target="_blank" style="color:#dc2743;">🔍 #GlanceInspires</a><br>
+        <a href="https://www.instagram.com/explore/tags/glanceitchopit/" target="_blank" style="color:#dc2743;">🔍 #GlanceItShopIt</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#000000;">Twitter/X</div>
+      <div class="count">791</div>
+      <div class="source">88 queries + 32 hashtags + profiles · ✅ Auth</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://x.com/search?q=%22Glance%22%20%22agentic%20commerce%22&f=top" target="_blank" style="color:#000;">🔍 Search: Glance agentic commerce</a><br>
+        <a href="https://x.com/glance_inspires" target="_blank" style="color:#000;">📄 @glance_inspires</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#E60023;">Pinterest</div>
+      <div class="count">759</div>
+      <div class="source">32 hashtags crawled · ✅ Auth</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.pinterest.com/search/pins/?q=glance%20AI%20shopping" target="_blank" style="color:#E60023;">🔍 Search: Glance AI shopping</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#B92B27;">Quora</div>
+      <div class="count">649</div>
+      <div class="source">20 search queries · ✅ Auth</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.quora.com/search?q=Glance+lock+screen+bloatware" target="_blank" style="color:#B92B27;">🔍 Search: Glance lock screen</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#FF0000;">YouTube</div>
+      <div class="count">471</div>
+      <div class="source">20 search queries</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.youtube.com/results?search_query=%22agentic+commerce%22" target="_blank" style="color:#FF0000;">🔍 Search: agentic commerce</a><br>
+        <a href="https://www.youtube.com/results?search_query=Glance+AI+shopping" target="_blank" style="color:#FF0000;">🔍 Search: Glance AI shopping</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#414141;">Play Store</div>
+      <div class="count">35</div>
+      <div class="source">Moto 2.4★ · TV 3.0★ · Standalone: Play 4.7★ / iOS 4.9★<br>Samsung: Galaxy Store · Avg: 3.75★</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://play.google.com/store/apps/details?id=com.glance.lockscreenM&hl=en_US" target="_blank" style="color:#414141;">📄 Glance for Motorola (2.4★)</a><br>
+        <a href="https://play.google.com/store/apps/details?id=com.glance.tv.screensaver&hl=en_US" target="_blank" style="color:#414141;">📄 Glance TV (3.0★)</a><br>
+        <a href="https://play.google.com/store/apps/details?id=com.glance.ai&hl=en_US" target="_blank" style="color:#414141;">📄 Standalone – Play Store (4.7★)</a><br>
+        <a href="https://apps.apple.com/us/app/glance-shop-with-ai/id6742974181" target="_blank" style="color:#414141;">📄 Standalone – iOS App Store (4.9★, 2K ratings)</a><br>
+        <a href="https://glance.com/newsroom/pressrelease/glance-samsung-galaxy-store-ai-shopping-experience-us" target="_blank" style="color:#414141;">📄 Samsung Galaxy Store partnership (press release)</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#4285F4;">Google Trends</div>
+      <div class="count">233</div>
+      <div class="source">Daily interest data Oct 25 - Apr 26</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://trends.google.com/trends/explore?date=2025-10-01%202026-04-10&geo=US&q=Glance%20AI,agentic%20commerce,AI%20shopping" target="_blank" style="color:#4285F4;">📊 Open Google Trends comparison</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#6C5CE7;">Exa Web</div>
+      <div class="count">435</div>
+      <div class="source">15 deep searches · 200+ domains</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.google.com/search?q=%22agentic+commerce%22+%22Glance%22&gl=us&hl=en" target="_blank" style="color:#6C5CE7;">🔍 Google: agentic commerce + Glance</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#FF6600;">HackerNews</div>
+      <div class="count">218</div>
+      <div class="source">Algolia search</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://hn.algolia.com/?q=agentic+commerce&dateRange=pastYear&type=story" target="_blank" style="color:#FF6600;">🔍 HN: agentic commerce</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#DA552F;">Product Hunt</div>
+      <div class="count">155</div>
+      <div class="source">5 search queries</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.producthunt.com/search?q=agentic+commerce" target="_blank" style="color:#DA552F;">🔍 PH: agentic commerce</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#00AB6C;">Medium</div>
+      <div class="count">96</div>
+      <div class="source">4 search queries</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://medium.com/search?q=agentic+commerce+glance" target="_blank" style="color:#00AB6C;">🔍 Medium: agentic commerce</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#FF6719;">Substack</div>
+      <div class="count">87</div>
+      <div class="source">4 search queries</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://substack.com/search/agentic%20commerce" target="_blank" style="color:#FF6719;">🔍 Substack: agentic commerce</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#FF492C;">Capterra</div>
+      <div class="count">233</div>
+      <div class="source">Product reviews</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.capterra.com/search/?query=glance+AI" target="_blank" style="color:#FF492C;">🔍 Capterra: Glance</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#FF6D52;">G2</div>
+      <div class="count">220</div>
+      <div class="source">Product reviews</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://www.g2.com/search?query=glance+AI+shopping" target="_blank" style="color:#FF6D52;">🔍 G2: Glance</a>
+      </div>
+    </div>
+    <div class="screenshot-card">
+      <div class="platform-badge" style="background:#333;">Other</div>
+      <div class="count">339</div>
+      <div class="source">XDA · Glassdoor · glance.com · SimilarWeb</div>
+      <div style="margin-top:8px;font-size:11px;">
+        <a href="https://glance.com/us/" target="_blank" style="color:#333;">📄 glance.com/us</a><br>
+        <a href="https://agenticcommerceindex.com/entity/glance" target="_blank" style="color:#333;">📄 Agentic Commerce Index</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VERIFY KEY CLAIMS -->
+<section>
+  <div class="section-header"><div class="num">✓</div><h3>Verify Key Claims — Click to Confirm</h3></div>
+  <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">Every major claim in this report links to a primary source. Click the 🔗 link, look for the highlighted text.</p>
+
+  <div class="card">
+    <h4>Industry Narrative Claims</h4>
+    <table>
+      <thead><tr><th style="width:35%;">Claim in Report</th><th style="width:40%;">Source</th><th style="width:25%;">Verify</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"30M U.S. Installs, 4,000+ AI-Powered Moments"</td>
+          <td>Glance LinkedIn post (ShopTalk 2026)</td>
+          <td><a href="https://www.linkedin.com/posts/glancescreen_shoptalk2026-agenticcommerce-glance-activity-7442345183255429120-fqKx" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open LinkedIn post</a></td>
+        </tr>
+        <tr>
+          <td>"Most significant transformation in commerce since the internet"</td>
+          <td>InMobi LinkedIn post</td>
+          <td><a href="https://www.linkedin.com/posts/inmobi_agenticai-aicommerce-shoptalk-activity-7441837989988773888-iV3b" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open LinkedIn post</a></td>
+        </tr>
+        <tr>
+          <td>Naveen Tewari "Agentic AI Commerce" announcement</td>
+          <td>Glance LinkedIn post</td>
+          <td><a href="https://www.linkedin.com/posts/glancescreen_glanceai-agenticai-aicommerce-activity-7432396355521843200-Mqd-" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open LinkedIn post</a></td>
+        </tr>
+        <tr>
+          <td>McKinsey "Agentic commerce opportunity" report</td>
+          <td>McKinsey & Company</td>
+          <td><a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-agentic-commerce-opportunity-how-ai-agents-are-ushering-in-a-new-era-for-consumers-and-merchants" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open McKinsey</a></td>
+        </tr>
+        <tr>
+          <td>Glance in Agentic Commerce Index</td>
+          <td>agenticcommerceindex.com</td>
+          <td><a href="https://agenticcommerceindex.com/entity/glance" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Index</a></td>
+        </tr>
+        <tr>
+          <td>Adyen "Agentic commerce: how businesses can move forward"</td>
+          <td>Adyen Knowledge Hub</td>
+          <td><a href="https://www.adyen.com/en_GB/knowledge-hub/agentic-commerce-control" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Adyen</a></td>
+        </tr>
+        <tr>
+          <td>Agentic commerce startup landscape</td>
+          <td>rye.com blog</td>
+          <td><a href="https://rye.com/blog/agentic-commerce-startups" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Rye</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>User Reality Claims (Negative Sentiment)</h4>
+    <table>
+      <thead><tr><th style="width:35%;">Claim in Report</th><th style="width:40%;">Source</th><th style="width:25%;">Verify</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff5f5;">
+          <td>"Glance AI is f***ing garbage"</td>
+          <td>r/MotoG — Reddit thread with user complaints</td>
+          <td><a href="https://www.reddit.com/r/MotoG/comments/1q8ucar/glance_ai_is_fcking_garbage/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Reddit thread</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"AI lockscreen that keeps reappearing"</td>
+          <td>r/mildlyinfuriating — trending complaint</td>
+          <td><a href="https://www.reddit.com/r/mildlyinfuriating/comments/1s16yot/this_ai_lockscreen_that_keeps_reappearing_on/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Reddit thread</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"Glance AI lockscreen" complaints on Samsung</td>
+          <td>r/samsunggalaxy — Samsung user discussion</td>
+          <td><a href="https://www.reddit.com/r/samsunggalaxy/comments/1sdzp0e/glance_ai_lockscreen/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Reddit thread</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"AI Lock Screen Pop Up" on S25 Ultra</td>
+          <td>r/S25Ultra — forced pop-up complaints</td>
+          <td><a href="https://www.reddit.com/r/S25Ultra/comments/1qi3qh6/ai_lock_screen_pop_up/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Reddit thread</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"Glance AI Lockscreen Ads"</td>
+          <td>Android Central Forum</td>
+          <td><a href="https://forums.androidcentral.com/threads/glance-ai-lockscreen-ads.1087122/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Forum thread</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"How do I get rid of Glance?"</td>
+          <td>Tom's Guide Forum</td>
+          <td><a href="https://forums.tomsguide.com/threads/how-do-i-get-rid-of-glance.585725/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Forum thread</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"How to Turn off Glance on Samsung Phones"</td>
+          <td>Beebom guide (editorial)</td>
+          <td><a href="https://gadgets.beebom.com/guides/how-to-turn-off-glance-on-samsung-phones" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Beebom</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"I Always Uninstall This One Thing on Android Phones"</td>
+          <td>Beebom editorial</td>
+          <td><a href="https://gadgets.beebom.com/stories/i-always-uninstall-this-one-thing-on-android-phones" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Beebom</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>Glance page on Consumer Rights Wiki</td>
+          <td>Consumer Rights Wiki</td>
+          <td><a href="https://consumerrights.wiki/w/Glance" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Wiki page</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>"How to disable Glance and recover a useful lock screen"</td>
+          <td>AndroidAyuda guide</td>
+          <td><a href="https://en.androidayuda.com/How-to-disable-Glance-and-recover-a-useful-lock-screen/" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open guide</a></td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td>Play Store rating: Motorola 2.4★ (45.8K reviews)</td>
+          <td>Google Play Store</td>
+          <td><a href="https://play.google.com/store/apps/details?id=com.glance.lockscreenM&hl=en_US" target="_blank" style="color:var(--negative);font-weight:600;">🔗 Open Play Store</a></td>
+        </tr>
+        <tr style="background:#f0fff4;">
+          <td>iOS App Store: Standalone 4.9★ (2K ratings, US)</td>
+          <td>Apple App Store</td>
+          <td><a href="https://apps.apple.com/us/app/glance-shop-with-ai/id6742974181" target="_blank" style="color:var(--positive);font-weight:600;">🔗 Open App Store</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h4>Brand Presence Claims</h4>
+    <table>
+      <thead><tr><th style="width:35%;">Claim in Report</th><th style="width:40%;">Source</th><th style="width:25%;">Verify</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>@glanceinspires = primary Instagram account</td>
+          <td>Instagram</td>
+          <td><a href="https://www.instagram.com/glanceinspires/" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Instagram</a></td>
+        </tr>
+        <tr>
+          <td>@glance_inspires = Twitter/X profile</td>
+          <td>Twitter/X</td>
+          <td><a href="https://x.com/glance_inspires" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Twitter</a></td>
+        </tr>
+        <tr>
+          <td>NYFW Glance Insider event post</td>
+          <td>Instagram post</td>
+          <td><a href="https://www.instagram.com/p/DVJeEgrkQu_/" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Instagram post</a></td>
+        </tr>
+        <tr>
+          <td>"Glance AI" scores 1/100 on Google Trends (US)</td>
+          <td>Google Trends</td>
+          <td><a href="https://trends.google.com/trends/explore?date=2025-10-01%202026-04-10&geo=US&q=Glance%20AI,agentic%20commerce,AI%20shopping" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Google Trends</a></td>
+        </tr>
+        <tr>
+          <td>Glance blog: "Agentic AI and the Shift to Autonomous Commerce"</td>
+          <td>glance.com</td>
+          <td><a href="https://glance.com/us/blogs/glanceai/ai-trends/agentic-ai-autonomous-decision-making" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Glance blog</a></td>
+        </tr>
+        <tr>
+          <td>Glance blog: "Intelligent Shopping Agent"</td>
+          <td>glance.com</td>
+          <td><a href="https://glance.com/us/blogs/glanceai/agentic-shopping/intelligent-shopping-agent-online-buying" target="_blank" style="color:var(--glance);font-weight:600;">🔗 Open Glance blog</a></td>
+        </tr>
+        <tr>
+          <td>Positive Reddit thread about Glance shopping agent</td>
+          <td>r/ArtificialIntelligence</td>
+          <td><a href="https://www.reddit.com/r/ArtificialInteligence/comments/1qsvbv8/honestly_the_glance_intelligent_shopping_agent_is/" target="_blank" style="color:var(--positive);font-weight:600;">🔗 Open Reddit thread</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- HASHTAG TABLE WITH LINKS -->
+<section>
+  <div class="card">
+    <h4>Hashtags Searched (32 across all platforms) — Click to Verify</h4>
+    <table>
+      <thead><tr><th>Hashtag</th><th>Instagram</th><th>LinkedIn</th><th>Twitter</th><th>Pinterest</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr class="glance-row"><td>#Glance</td><td><a href="https://www.instagram.com/explore/tags/glance/" target="_blank" style="color:var(--glance);">63</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23Glance" target="_blank" style="color:var(--glance);">17</a></td><td><a href="https://x.com/search?q=%23Glance&f=top" target="_blank" style="color:var(--glance);">6</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23Glance" target="_blank" style="color:var(--glance);">26</a></td><td><strong>112</strong></td></tr>
+        <tr class="glance-row"><td>#AskGlance</td><td><a href="https://www.instagram.com/explore/tags/askglance/" target="_blank" style="color:var(--glance);">46</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23AskGlance" target="_blank" style="color:var(--glance);">3</a></td><td><a href="https://x.com/search?q=%23AskGlance&f=top" target="_blank" style="color:var(--glance);">1</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23AskGlance" target="_blank" style="color:var(--glance);">35</a></td><td><strong>85</strong></td></tr>
+        <tr style="background:#fff5f5;"><td>#GlanceGetsMe</td><td style="color:var(--negative);font-weight:700;"><a href="https://www.instagram.com/explore/tags/glancegetsme/" target="_blank" style="color:var(--negative);">0</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23GlanceGetsMe" target="_blank" style="color:var(--glance);">3</a></td><td style="color:var(--negative);font-weight:700;"><a href="https://x.com/search?q=%23GlanceGetsMe&f=top" target="_blank" style="color:var(--negative);">0</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23GlanceGetsMe" target="_blank" style="color:var(--glance);">21</a></td><td>24</td></tr>
+        <tr class="glance-row"><td>#GlanceItShopIt</td><td><a href="https://www.instagram.com/explore/tags/glanceitchopit/" target="_blank" style="color:var(--glance);">15</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23GlanceItShopIt" target="_blank" style="color:var(--glance);">5</a></td><td style="color:var(--negative);font-weight:700;"><a href="https://x.com/search?q=%23GlanceItShopIt&f=top" target="_blank" style="color:var(--negative);">0</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23GlanceItShopIt" target="_blank" style="color:var(--glance);">31</a></td><td><strong>51</strong></td></tr>
+        <tr><td>#GlanceAI</td><td><a href="https://www.instagram.com/explore/tags/glanceai/" target="_blank" style="color:var(--glance);">47</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23GlanceAI" target="_blank" style="color:var(--glance);">17</a></td><td><a href="https://x.com/search?q=%23GlanceAI&f=top" target="_blank" style="color:var(--glance);">9</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23GlanceAI" target="_blank" style="color:var(--glance);">31</a></td><td>104</td></tr>
+        <tr><td>#ShopWithAI</td><td><a href="https://www.instagram.com/explore/tags/shopwithai/" target="_blank" style="color:var(--glance);">36</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23ShopWithAI" target="_blank" style="color:var(--glance);">17</a></td><td><a href="https://x.com/search?q=%23ShopWithAI&f=top" target="_blank" style="color:var(--glance);">9</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23ShopWithAI" target="_blank" style="color:var(--glance);">30</a></td><td>92</td></tr>
+        <tr><td>#AgenticCommerce</td><td><a href="https://www.instagram.com/explore/tags/agenticcommerce/" target="_blank" style="color:var(--glance);">48</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23AgenticCommerce" target="_blank" style="color:var(--glance);">27</a></td><td><a href="https://x.com/search?q=%23AgenticCommerce&f=top" target="_blank" style="color:var(--glance);">10</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23AgenticCommerce" target="_blank" style="color:var(--glance);">13</a></td><td>98</td></tr>
+        <tr><td>#AIShoppingAssistant</td><td><a href="https://www.instagram.com/explore/tags/aishoppingassistant/" target="_blank" style="color:var(--glance);">48</a></td><td><a href="https://www.linkedin.com/search/results/content/?keywords=%23AIShoppingAssistant" target="_blank" style="color:var(--glance);">13</a></td><td><a href="https://x.com/search?q=%23AIShoppingAssistant&f=top" target="_blank" style="color:var(--glance);">24</a></td><td><a href="https://www.pinterest.com/search/pins/?q=%23AIShoppingAssistant" target="_blank" style="color:var(--glance);">23</a></td><td>108</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--negative);margin-top:8px;font-weight:600;">⚠ #GlanceGetsMe = 0 on Instagram and Twitter. #GlanceItShopIt = 0 on Twitter. Click the zeros to verify — these hashtags have failed to gain adoption on high-reach platforms.</p>
+  </div>
+
+  <div class="card">
+    <h4>Additional Glance + Category Hashtags</h4>
+    <table>
+      <thead><tr><th>Hashtag</th><th>Instagram</th><th>LinkedIn</th><th>Twitter</th><th>Pinterest</th><th>Total</th><th>Type</th></tr></thead>
+      <tbody>
+        <tr class="glance-row"><td>#GlanceInspires</td><td>14</td><td>3</td><td>0</td><td>14</td><td>31</td><td>Brand</td></tr>
+        <tr class="glance-row"><td>#GlanceLockScreen</td><td>50</td><td>15</td><td>2</td><td>18</td><td>85</td><td>Brand</td></tr>
+        <tr><td>#AIShopping</td><td>50</td><td>11</td><td>11</td><td>23</td><td>95</td><td>Category</td></tr>
+        <tr><td>#AICommerce</td><td>56</td><td>18</td><td>11</td><td>19</td><td>104</td><td>Category</td></tr>
+        <tr><td>#ConversationalCommerce</td><td>56</td><td>20</td><td>8</td><td>24</td><td>108</td><td>Category</td></tr>
+      </tbody>
+    </table>
+    <div class="so-what"><strong>Key takeaway →</strong> Category hashtags (#AIShopping, #AICommerce) have <strong>2-5x more adoption</strong> than Glance branded hashtags. The agentic commerce conversation is happening — just <strong>without Glance's name attached</strong>.</div>
+  </div>
+</section>
+
+<!-- FULL RECORDS TABLE -->
+<section>
+  <div class="card">
+    <h4>Complete Records by Platform (13,187 total)</h4>
+    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:12px;">Every record in this study. Sorted by volume. ✅ = authenticated crawl with user login.</p>
+    <table>
+      <thead><tr><th>Platform</th><th style="width:80px;">Records</th><th style="width:60px;">Auth?</th><th style="width:60px;">% of Total</th><th>What We Collected</th></tr></thead>
+      <tbody>
+        <tr style="background:var(--accent-bg);"><td><strong>Reddit</strong></td><td style="font-weight:700;">4,168</td><td>✅</td><td>31.6%</td><td>Comments from 200+ threads, 25+ subreddits</td></tr>
+        <tr><td><strong>LinkedIn (posts)</strong></td><td>1,331</td><td>✅</td><td>10.1%</td><td>Posts from 64 queries + 32 hashtags</td></tr>
+        <tr><td><strong>Instagram</strong></td><td>1,629</td><td>✅</td><td>12.4%</td><td>Posts from 32 hashtags + click-throughs</td></tr>
+        <tr><td><strong>Twitter/X</strong></td><td>791</td><td>✅</td><td>6.0%</td><td>Tweets from 88 queries + 32 hashtags</td></tr>
+        <tr><td><strong>Pinterest</strong></td><td>759</td><td>✅</td><td>5.8%</td><td>Pins from 32 hashtags</td></tr>
+        <tr><td><strong>Quora</strong></td><td>649</td><td>✅</td><td>4.9%</td><td>Q&A from 20 queries</td></tr>
+        <tr><td><strong>LinkedIn (Co. Pages)</strong></td><td>538</td><td>✅</td><td>4.1%</td><td>Glance + InMobi official page posts</td></tr>
+        <tr><td><strong>YouTube</strong></td><td>471</td><td></td><td>3.6%</td><td>Videos from 20 queries</td></tr>
+        <tr><td><strong>Exa Web</strong></td><td>435</td><td></td><td>3.3%</td><td>Articles from 200+ domains</td></tr>
+        <tr><td><strong>Capterra</strong></td><td>233</td><td></td><td>1.8%</td><td>Product listings + reviews</td></tr>
+        <tr><td><strong>Google Trends</strong></td><td>233</td><td></td><td>1.8%</td><td>Daily interest data (Oct 25 – Apr 26)</td></tr>
+        <tr><td><strong>G2</strong></td><td>220</td><td></td><td>1.7%</td><td>Product reviews</td></tr>
+        <tr><td><strong>HackerNews</strong></td><td>218</td><td></td><td>1.7%</td><td>Stories + comments (Algolia search)</td></tr>
+        <tr><td><strong>SimilarWeb</strong></td><td>203</td><td></td><td>1.5%</td><td>Traffic + engagement data</td></tr>
+        <tr><td><strong>Product Hunt</strong></td><td>155</td><td></td><td>1.2%</td><td>Product listings</td></tr>
+        <tr><td><strong>Medium</strong></td><td>96</td><td></td><td>0.7%</td><td>Articles</td></tr>
+        <tr><td><strong>Substack</strong></td><td>87</td><td></td><td>0.7%</td><td>Newsletters</td></tr>
+        <tr><td><strong>glance.com/us</strong></td><td>85</td><td></td><td>0.6%</td><td>Blog + product pages</td></tr>
+        <tr><td><strong>App Store (iOS)</strong></td><td>76</td><td></td><td>0.6%</td><td>App listings</td></tr>
+        <tr><td><strong>XDA Developers</strong></td><td>72</td><td></td><td>0.5%</td><td>Forum posts (removal guides)</td></tr>
+        <tr><td><strong>India Reference</strong></td><td>71</td><td></td><td>0.5%</td><td>Geo-quarantined (not in main analysis)</td></tr>
+        <tr><td><strong>Quarter-scoped Google</strong></td><td>57</td><td></td><td>0.4%</td><td>Date-filtered search results</td></tr>
+        <tr><td><strong>Glassdoor</strong></td><td>56</td><td></td><td>0.4%</td><td>Company reviews + culture signals</td></tr>
+        <tr><td><strong>Competitor Discovery</strong></td><td>50</td><td></td><td>0.4%</td><td>Brand identification scan</td></tr>
+        <tr><td><strong>Play Store</strong></td><td>35</td><td></td><td>0.3%</td><td>User reviews (US + India + Realme variants)</td></tr>
+        <tr><td><strong>Google Web</strong></td><td>10</td><td></td><td>0.1%</td><td>Organic search results</td></tr>
+        <tr style="background:var(--accent-bg);font-weight:700;"><td><strong>TOTAL</strong></td><td><strong>13,187</strong></td><td></td><td><strong>100%</strong></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+  <!-- Methodology -->
+  <details>
+    <summary>Methodology & Data Quality</summary>
+    <div class="details-content">
+      <ul style="padding-left:18px;">
+        <li><strong>13,187 total records</strong> across 21 platforms after deduplication</li>
+        <li><strong>6 platforms authenticated</strong> (Twitter, Reddit, LinkedIn, Instagram, Pinterest, Quora) — logged in with user credentials for full access</li>
+        <li><strong>32 hashtags searched</strong> cross-platform (including #Glance, #AskGlance, #GlanceGetsMe, #GlanceItShopIt per stakeholder request)</li>
+        <li><strong>15 brands tracked</strong> with text-verified mentions only</li>
+        <li><strong>India content geo-quarantined</strong> — 71 records separated for reference only</li>
+        <li><strong>SOV = brand mentions / total category mentions per time window</strong></li>
+        <li><strong>Reality Layer scoring</strong>: USER_REALITY (Reddit, Play Store, forums) vs INDUSTRY_NARRATIVE (LinkedIn, press) — scored independently, never averaged</li>
+        <li><strong>Google Trends data</strong>: Daily interest scores for "Glance AI", "agentic commerce", "AI shopping", "shopping with AI" (US, Oct 2025 - Apr 2026) — <a href="https://trends.google.com/trends/explore?date=2025-10-01%202026-04-10&geo=US&q=Glance%20AI,agentic%20commerce,AI%20shopping" target="_blank" style="color:var(--glance);">verify here</a></li>
+        <li><strong>Gaps</strong>: TikTok (geo-blocked, India ban), Google News (geo-routing failure). Both declared, not hidden.</li>
+        <li><strong>Study period</strong>: Q4 2025 (Oct 1 - Dec 31) vs Q1 2026 (Jan 1 - Mar 31)</li>
+      </ul>
+    </div>
+  </details>
+
+</div><!-- end tab-evidence -->
+
+<!-- TAB 7: LIMITATIONS & CAVEATS -->
+<div id="tab-caveats" class="tab-content">
+
+<section>
+  <div class="section-header"><div class="num">⚖️</div><h3>Read This Before Sharing — Limitations & Caveats</h3></div>
+  <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;">This report contains useful directional findings. It is not a peer-reviewed study. Every number in this report should be treated as <strong>"approximately right"</strong> rather than <strong>"precisely measured."</strong> Below are the things you should know before citing any figure externally.</p>
+
+  <!-- CAVEAT 1 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>1. This Is a Snapshot, Not Continuous Monitoring</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>All data was crawled over <strong>2 days</strong> (April 9-10, 2026). Q4 2025 figures are <strong>retrospective estimates</strong> — we looked at content dated in Q4 during an April crawl. We did not actually crawl anything in Q4 2025.</td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>The "Q4 vs Q1" framing implies longitudinal tracking. In reality, it's a best-effort reconstruction. Numbers will shift if someone re-runs the same queries next week.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td><em>"As of April 2026, based on a point-in-time analysis of ~13K records…"</em> — not <em>"Glance's SOV grew from 5% to 14%."</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAVEAT 2 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>2. SOV Figures Are Based on Our Sample, Not the Full Internet</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>We ran specific search queries on 21 platforms and counted brand mentions in the results. The 14.1% US SOV means: <em>"Of the 773 US records we found for March, 109 mentioned Glance."</em></td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>A different set of search queries, platforms, or date filters would produce a different SOV number. This is not a Brandwatch, Meltwater, or Sprinklr measurement — it's a custom crawl.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td><em>"Glance appeared in ~14% of agentic commerce conversations in our sample"</em> — not <em>"Glance has 14.1% market share of voice."</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAVEAT 3 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>3. Glance's Own Content Is Included in the SOV Calculation</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>538 LinkedIn records come from Glance + InMobi's own company pages. These count toward Glance's SOV just like third-party mentions do.</td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>The headline 14.1% US SOV is inflated by self-published content. If filtered to <strong>organic/third-party mentions only</strong>, US SOV drops to approximately <strong>8-9%</strong>.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td>Always mention both numbers: <em>"14.1% total SOV (8-9% organic/third-party)"</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAVEAT 4 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>4. The 13,187 Records Include Different Things</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>A "record" could be a McKinsey report, a one-line Reddit comment, a Pinterest pin, or a Play Store review. They are not equivalent in quality or relevance.</td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>Many Reddit records are about lock screen removal — not agentic commerce. Many Instagram records are false positives (generic "at first glance, inspires" phrases). The total count sounds rigorous but masks massive quality variance.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td><em>"Analysis of ~13K online mentions across 21 platforms"</em> — don't imply they're all about agentic commerce specifically.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAVEAT 5 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>5. Competitors Were Not Analyzed at the Same Depth</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>We crawled Play Store reviews, Reddit complaints, hashtag adoption, and support quality for <strong>Glance only</strong>. We did not do the same for Google, Shopify, Amazon, or any other brand.</td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>We don't know if competitors have equally bad reality layer divergence. Google's AI Mode might also have bad Reddit threads. The analysis is <strong>asymmetric</strong> — Glance's weaknesses are documented, competitors' are not.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td>Don't say <em>"Glance has the worst user sentiment in the category."</em> Say <em>"Glance's user sentiment is strongly negative — we did not benchmark competitors on this dimension."</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAVEAT 6 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>6. Sentiment Scores and Severity Levels Are Analyst-Assigned</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>The Reality Layer Divergence (0.85), sentiment scores (+0.72 / -0.78), and complaint severity levels (1-5) were classified by the analysis system, not by a validated NLP model or independent raters.</td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>These are structured estimates, not statistical measurements. The "75% are Level 3+" finding is based on our own definition of what constitutes "trust erosion" vs "feature complaint." A different analyst might draw the line differently.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td><em>"Our analysis classified ~75% of negative mentions as trust-erosion or higher severity"</em> — not <em>"75% of users report harm."</em></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CAVEAT 7 -->
+  <div class="card" style="border-left:4px solid var(--warning);">
+    <h4>7. App Store Ratings Are Live Data — Verify Before Citing</h4>
+    <table>
+      <tbody>
+        <tr><td style="width:120px;font-weight:700;">What we did</td><td>Ratings were collected from Play Store and iOS App Store: Motorola 2.4★ (45.8K reviews), TV 3.0★ (379 reviews), Standalone Play 4.7★, Standalone iOS 4.9★ (2K ratings, US). Samsung is Galaxy Store-exclusive (rating not publicly accessible via web).</td></tr>
+        <tr><td style="font-weight:700;">What this means</td><td>Ratings change daily. The 3.75★ simple average treats all apps equally regardless of review volume. A weighted average (by review count) would be ~2.5★ — heavily pulled by Motorola's 45.8K reviews. Both numbers are valid but tell different stories.</td></tr>
+        <tr><td style="font-weight:700;">How to cite</td><td>Include the date: <em>"As of April 2026, Glance for Motorola had a 2.4★ rating on ~45.8K reviews."</em> Verify the rating is still current before any external presentation.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WHAT IS RELIABLE -->
+  <div class="card" style="border-left:4px solid var(--positive);">
+    <h4 style="color:var(--positive);">What You CAN Confidently Say</h4>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">Despite the caveats above, the following findings are robust and supported by multiple independent data sources:</p>
+    <table>
+      <tbody>
+        <tr style="background:#f0fff4;"><td style="width:40%;font-weight:700;">B2B and B2C channels tell different stories</td><td>This is independently confirmed by LinkedIn data (positive), Reddit data (negative), Play Store reviews (negative), and Google Trends (near-zero search). No single source is carrying this finding.</td></tr>
+        <tr style="background:#f0fff4;"><td style="font-weight:700;">Glance's SOV in agentic commerce grew in Q1</td><td>Regardless of exact percentage, Glance appears more frequently in Q1 2026 content than Q4 2025 content across multiple platforms. The direction is clear even if the magnitude is approximate.</td></tr>
+        <tr style="background:#f0fff4;"><td style="font-weight:700;">The DirecTV/TV product is the strongest narrative asset</td><td>ShopTalk coverage, The Drum editorial, and the absence of competitors in TV-native commerce are all independently verifiable.</td></tr>
+        <tr style="background:#f0fff4;"><td style="font-weight:700;">Lock screen complaints are real and intense</td><td>Thousands of Reddit upvotes, hundreds of Play Store "helpful" votes, multiple tech editorial removal guides, and a Consumer Rights Wiki page all point the same direction.</td></tr>
+        <tr style="background:#f0fff4;"><td style="font-weight:700;">Different Glance products have dramatically different ratings</td><td>The standalone "Shop with AI" app (4.7★ Play, 4.9★ iOS) and Motorola lock screen (2.4★) are different products with different experiences — but both carry the Glance brand. This rating gap is directly observable on the Play Store and iOS App Store. <a href="https://apps.apple.com/us/app/glance-shop-with-ai/id6742974181" target="_blank" style="color:var(--glance);">Verify iOS →</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="so-what"><strong>The one-line version →</strong> This report is directionally reliable and useful for strategic planning. It is not precise enough for external benchmarking, investor presentations, or regulatory filings without independent verification of specific claims.</div>
+
+</section>
+</div><!-- end tab-caveats -->
+
+<!-- FOOTER -->
+<div class="footer">
+  SOV Intelligence System v7.1 · Run ID: sov_v7_20260409_full · April 10, 2026<br>
+  13,187 Records · 21 Platforms · 15 Brands · 32 Hashtags · Global + US Market<br>
+  <span style="color:var(--glance);font-weight:600;">Glance SOV: 5.0% → 14.1% (US March) · Reality Divergence: 0.85 / 1.0</span>
+</div>
+
+</div><!-- end container -->
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#636e72';
+
+// CHART 1: Global SOV by Month
+new Chart(document.getElementById('globalSovChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q4 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026'],
+    datasets: [
+      { label: 'Google', data: [22.0, 28.5, 24.2, 26.3], backgroundColor: '#4285F4' },
+      { label: 'Shopify', data: [8.2, 10.1, 12.8, 14.7], backgroundColor: '#96BF48' },
+      { label: 'Amazon', data: [15.1, 14.2, 12.5, 13.1], backgroundColor: '#FF9900' },
+      { label: 'Glance', data: [5.0, 3.2, 8.4, 11.8], backgroundColor: '#6C5CE7', borderColor: '#6C5CE7', borderWidth: 2 },
+      { label: 'OpenAI', data: [14.3, 12.1, 9.8, 10.2], backgroundColor: '#10A37F' },
+      { label: 'Microsoft', data: [5.5, 9.8, 7.1, 6.4], backgroundColor: '#00BCF2' },
+      { label: 'Walmart', data: [4.1, 5.2, 7.6, 5.8], backgroundColor: '#0071CE' },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'Global Brand SOV by Month — Agentic Commerce', font: { size: 16, weight: 'bold' } },
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } },
+    },
+    scales: { y: { beginAtZero: true, title: { display: true, text: 'SOV %' }, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+// CHART 2: Reality Layer Divergence
+new Chart(document.getElementById('realityChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Industry Narrative\n(LinkedIn, Press)', 'Investor Narrative\n(News, Twitter)', 'User Reality\n(Reddit, Play Store)'],
+    datasets: [{
+      label: 'Glance Sentiment Score',
+      data: [0.72, 0.45, -0.78],
+      backgroundColor: ['#00b894', '#fdcb6e', '#d63031'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'Reality Layer Divergence — What Different Audiences Think of Glance', font: { size: 16, weight: 'bold' } },
+      legend: { display: false },
+    },
+    scales: {
+      x: { min: -1, max: 1, title: { display: true, text: '← NEGATIVE    Sentiment Score    POSITIVE →' },
+        ticks: { callback: v => v === 0 ? 'Neutral' : v > 0 ? '+' + v : v }
+      }
+    }
+  }
+});
+
+// CHART 3: B2B vs B2C Voice Over Time
+new Chart(document.getElementById('b2bB2cChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Q4 2025', 'Jan 2026', 'Feb 2026', 'Mar 2026'],
+    datasets: [
+      { label: 'B2B (Industry)', data: [72, 70, 66, 61], backgroundColor: '#00b894', borderRadius: 4 },
+      { label: 'B2C (Consumer)', data: [28, 30, 34, 39], backgroundColor: '#d63031', borderRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'B2B and B2C Share of Glance Mentions — Global (%)', font: { size: 16, weight: 'bold' } },
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+    },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true, max: 100, title: { display: true, text: '% of Glance Mentions' }, ticks: { callback: v => v + '%' } }
+    }
+  }
+});
+
+// CHART 4: Product Line Comparison
+new Chart(document.getElementById('productChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Motorola\nSpaces', 'Samsung\nExpressions', 'TV\nDirecTV', 'Standalone\n(Play)', 'Standalone\n(iOS)'],
+    datasets: [
+      { label: 'App Store Rating (★)', data: [2.4, null, 3.0, 4.7, 4.9], backgroundColor: ['#d63031', '#636e72', '#fdcb6e', '#00b894', '#00b894'], borderRadius: 6, yAxisID: 'y' },
+      { label: 'Sentiment Score', data: [-0.82, -0.60, 0.25, 0.55, 0.55], backgroundColor: ['#d6303180', '#63697280', '#fdcb6e80', '#00b89480', '#00b89480'], borderRadius: 6, yAxisID: 'y1' },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: 'User Sentiment by Product Line — App Store Rating vs Sentiment Score', font: { size: 16, weight: 'bold' } },
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label === 'App Store Rating (★)' ? ctx.parsed.y + '★' : (ctx.parsed.y > 0 ? '+' : '') + ctx.parsed.y } }
+    },
+    scales: {
+      y: { position: 'left', min: 0, max: 5, title: { display: true, text: 'App Store Rating (★)' }, ticks: { callback: v => v + '★' } },
+      y1: { position: 'right', min: -1, max: 1, title: { display: true, text: 'Sentiment Score' }, grid: { drawOnChartArea: false }, ticks: { callback: v => v === 0 ? '0' : v > 0 ? '+' + v : v } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>

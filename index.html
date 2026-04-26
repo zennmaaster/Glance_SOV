@@ -89,7 +89,25 @@
 
   /* Alerts */
   .alerts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .inline-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .inline-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
   @media (max-width: 700px) { .alerts-grid { grid-template-columns: 1fr; } }
+
+  @media (max-width: 600px) {
+    .inline-grid-2, .inline-grid-3 { grid-template-columns: 1fr !important; }
+    .hero h1 { font-size: 22px; }
+    .hero .subtitle { font-size: 14px; }
+    .headline-panel { padding: 20px; }
+    .headline-panel h2 { font-size: 18px; }
+    .card { padding: 16px; overflow-x: auto; }
+    .chart-container { overflow-x: auto; }
+    .section-header h3 { font-size: 17px; }
+    .tab-btn { padding: 10px 14px; font-size: 13px; }
+    table { font-size: 12px; min-width: 400px; }
+    th, td { padding: 8px 8px; }
+  }
   .alert-card { border-radius: 10px; padding: 20px; border: 1px solid; }
   .alert-card.risk { background: #fff5f5; border-color: #feb2b2; }
   .alert-card.opp { background: #f0fff4; border-color: #9ae6b4; }
@@ -221,7 +239,7 @@
   <details open>
     <summary style="background:#f0fff4;border-color:var(--positive);">🏆 Biggest Win: From 7th to 3rd in One Quarter</summary>
     <div class="details-content">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="inline-grid-2" style="margin-bottom:16px;">
         <div style="background:var(--accent-bg);padding:16px;border-radius:8px;text-align:center;">
           <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;font-weight:700;">Q4 2025</div>
           <div style="font-size:36px;font-weight:800;color:var(--text-secondary);">5.0%</div>
@@ -327,7 +345,7 @@
     <div class="details-content">
       <p style="font-size:14px;margin-bottom:16px;">The most unexpected finding in this analysis: the Glance brand is not one thing. It maps to at least four distinct user experiences with a <strong>2.5-star spread</strong> between the worst and best rated products.</p>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="inline-grid-2" style="margin-bottom:16px;">
         <div style="background:#fff5f5;padding:20px;border-radius:8px;text-align:center;border:2px solid var(--negative);">
           <div style="font-size:11px;color:var(--negative);text-transform:uppercase;font-weight:700;margin-bottom:4px;">Most Visible Product</div>
           <div style="font-size:13px;font-weight:600;">Motorola Lock Screen (Spaces)</div>
@@ -1513,7 +1531,7 @@
   <div style="background:linear-gradient(135deg,#6C5CE7 0%,#a29bfe 100%);color:white;border-radius:12px;padding:24px;margin:20px 0;text-align:center;">
     <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;opacity:0.8;margin-bottom:8px;">Q1 2026 Event Strategy</div>
     <div style="font-size:22px;font-weight:800;margin-bottom:16px;">Three Events. Three Verticals. One Quarter.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+    <div class="inline-grid-3">
       <div style="background:rgba(255,255,255,0.15);border-radius:8px;padding:16px;">
         <div style="font-size:28px;font-weight:800;">NYFW</div>
         <div style="font-size:12px;opacity:0.9;">Feb 16 · Fashion</div>
